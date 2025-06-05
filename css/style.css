@@ -1,0 +1,2327 @@
+/*----------------------------------------*/
+
+/* Template default CSS
+/*----------------------------------------*/
+
+html,
+body { 
+	font-family: "Arial", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased; 
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	color: #111111;
+	font-weight: 400;
+	font-family: "Arial", sans-serif;
+}
+
+h1 {
+	font-size: 70px;
+}
+
+h2 {
+	font-size: 36px;
+}
+
+h3 {
+	font-size: 30px;
+}
+
+h4 {
+	font-size: 24px;
+}
+
+h5 {
+	font-size: 18px;
+}
+
+h6 {
+	font-size: 16px;
+}
+
+p {
+	font-size: 15px;
+	font-family: "Arial", sans-serif;
+	color: #666666;
+	font-weight: 400;
+	line-height: 26px;
+	margin: 0 0 0 0;
+}
+
+img {
+	max-width: 100%;
+}
+
+input:focus,
+select:focus,
+button:focus,
+textarea:focus {
+	outline: none;
+	background: none;
+}
+
+a:hover,
+a:focus {
+	text-decoration: none;
+	outline: none;
+	color: #fff;
+}
+
+ul,
+ol {
+	padding: 0;
+	margin: 0;
+}
+
+ol li{
+	padding-left: 30px;
+}
+
+.text-white h1,
+.text-white h2,
+.text-white h3,
+.text-white h4,
+.text-white h5,
+.text-white h6,
+.text-white p,
+.text-white span,
+.text-white li,
+.text-white a {
+	color: #fff;
+}
+
+/* buttons */
+
+.primary-btn {
+	display: inline-block;
+	font-size: 16px;
+	padding: 14px 30px;
+	color: #ffffff;
+	background: #2680fc;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-family: "Quantico", sans-serif;
+	border-color: none;
+}
+
+.site-btn {
+	font-size: 15px;
+	color: #ffffff;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-family: "Quantico", sans-serif;
+	display: inline-block;
+	padding: 14px 30px 12px;
+	background: #FF0000;
+	border: 1px solid #000000;
+	border-radius: 25px;
+}
+
+.site-btn:hover,
+.site-btn:focus{
+	color: #FF0000;
+	background: #000000;
+}
+
+.margin{
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+	padding-top: 30px !important;
+	padding-bottom: 10px !important;
+} 
+
+.opacity1{ 
+	opacity: 1
+}
+/*--------------------------------------------------------------
+# Global 
+--------------------------------------------------------------*/
+/*---------------------
+PRELODER
+-----------------------*/
+
+#preloder {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 999999;
+	background: #fff;
+}
+
+.loader {
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -13px;
+	margin-left: -13px;
+	border-radius: 60px;
+	animation: loader 0.8s linear infinite;
+	-webkit-animation: loader 0.8s linear infinite;
+}
+
+@keyframes loader {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+		border: 4px solid #f44336;
+		border-left-color: transparent;
+	}
+	50% {
+		-webkit-transform: rotate(180deg);
+		transform: rotate(180deg);
+		border: 4px solid #673ab7;
+		border-left-color: transparent;
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+		border: 4px solid #f44336;
+		border-left-color: transparent;
+	}
+}
+
+@-webkit-keyframes loader {
+	0% {
+		-webkit-transform: rotate(0deg);
+		border: 4px solid #f44336;
+		border-left-color: transparent;
+	}
+	50% {
+		-webkit-transform: rotate(180deg);
+		border: 4px solid #673ab7;
+		border-left-color: transparent;
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		border: 4px solid #f44336;
+		border-left-color: transparent;
+	}
+}
+
+/*---------------------
+CTA-SECTION
+-----------------------*/
+.cta-section {
+	margin-top: 86px;  
+	/* border: 2px solid red; */
+}
+
+.cta-section .text {  
+	margin: 40px 250px; 
+}
+
+.cta-text {
+	text-align: center;
+}
+
+.cta-text h2 {
+	font-size: 50px; 
+	color: white;   
+	text-shadow: 0 0 5px black, 0 0 5px black;
+}
+
+.whiteFont h2{
+	color: #FFFFFF; 
+}
+
+.whiteFont p{
+	color: #FFFFFF !important; 
+}
+
+.text-sub {
+	display: inline-block;
+	width: 900px;  
+	background-color: #F15A59;  
+}
+
+.cta-text p {
+	font-size: 20px;   
+	color: white;   
+	text-shadow: 0 0 5px black, 0 0 5px black;
+	padding: 1% 50px;
+}
+
+/*---------------------
+SPAD
+-----------------------*/
+.spad {
+	padding-top: 8%;
+	padding-bottom: 8%;
+}
+
+.spad2 {
+	padding-top: 4rem;
+	padding-bottom: 4rem; 
+}
+
+.spadBottom { 
+	padding-bottom: 4rem; 
+	background-color: #f0efef;
+}
+
+.spad3 {
+	padding-top: 8%;
+	padding-bottom: 8%;
+	height: 630px;
+}
+
+.line {
+	margin-left: 30px;
+	margin-right: 30px; 
+	height:5px;
+	background-color: #e2d5d5;
+}
+ 
+/*---------------------
+SET-BG
+-----------------------*/
+.set-bg { 
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;  
+} 
+
+.opacity{ 
+    background-color: rgba(255,255,255,0.3);
+    background-blend-mode: lighten;
+}
+
+.opacity .cta-text h2{
+	color: black;  
+	text-shadow: none; 
+	font-weight: bold;
+}
+
+
+/*---------------------
+CTA-TEXT
+-----------------------*/
+
+/*---------------------
+TESTIMONIAL-SECTION
+-----------------------*/ 
+.testimonial-section .button { /*Button After SubHeading EX: coal-shipping.php*/
+	color: #000000;
+	background-color: #FFFFFF;
+	padding: 5px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 1% 5px;
+	cursor: pointer;
+	border-radius: 40px;
+	width: 200px;
+	border:1px solid #000000;
+}   
+
+.testimonial-section .button:hover,
+.testimonial-section .button.active {
+	opacity: 1;
+	background-color: #FF0000;
+	color: #FFFFFF;
+}    
+
+.testimonial-section .section-title { /*SUB HEADING BOX EX: coal-shipping.php*/
+	margin: 4% auto; 
+	/*margin-right: 10%;
+	margin-left: 10%; */ 
+} 
+.testimonial-section .section-title h4{  /*TEXT ON SUB HEADING  EX: With a track record of.. ON about-us.php*/
+	color: black; 
+	font-size: 22px;
+	text-align: left; 
+	line-height: calc(1.5*22px);
+	padding: 0px 11px;
+}
+.testimonial-section .quotes::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+	content: '“';
+	position: absolute;
+	font-size: 80px;
+	line-height: 0; 
+	left: -2%;
+	color: #000000;
+} 
+.testimonial-section .quotes::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+	font-size: 80px;
+	content: '”';
+	position: absolute;
+	float: right;
+	bottom: -10%;
+	right: -2%;
+	color: #000000;
+} 
+.testimonial-section .quotes1::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+	content: '“';
+	position: relative;
+	font-size: 40px;
+	line-height: 0; 
+	top: 4px;
+	left: -3%;
+	color: #000000;
+} 
+.testimonial-section .quotes1::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+	font-size: 40px;
+	content: '”';
+	position: relative;
+	float: right;
+	bottom: 0px;
+	right: -2%;
+	color: #000000;
+} 
+.testimonial-section .quotes2::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+	content: '“';
+	position: absolute;
+	font-size: 40px;
+	line-height: 0; 
+	top: 60px;
+	left: 6%;
+	color: #000000;
+} 
+.testimonial-section .quotes2::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+	font-size: 40px;
+	content: '”';
+	position: relative;
+	float: right;
+	bottom: 0px;
+	right: -2%;
+	color: #000000;
+}  
+.testimonial-section .quotes3::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+	content: '“';
+	position: absolute;
+	font-size: 40px;
+	line-height: 0; 
+	top: 60px;
+	left: 13%;
+	color: #000000;
+} 
+.testimonial-section .quotes3::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+	font-size: 40px;
+	content: '”';
+	position: relative;
+	float: right;
+	bottom: 0px;
+	right: -2%;
+	color: #000000;
+} 
+span.adj{
+	display: inline-block;
+	text-indent: 20px;
+}
+.testimonial-section img.center{ /*EX: corporate-structure.php*/
+	display: block;
+	position: relative;
+	margin: auto;
+	padding: 20px 0;
+}
+
+
+/*---------------------
+ESG
+-----------------------*/
+.esgcontainer{  
+	text-align: left;    
+} 
+
+img.esg{   
+	width: 100%;
+	height: 100%;    
+}
+
+.bottom-left {
+	position: absolute;
+	left: 40px;
+	right: 40px;
+	bottom: 0px; 
+}
+
+.bottom-left .esg-icon{
+	width: 20%;
+	height: 20%;   
+	padding-bottom: 15px; 
+}
+
+.bottom-left h6{
+	font-size: 20px;
+	font-weight: 700;
+	color: white;
+	padding-bottom: 15px;
+}
+
+p.esgheight{
+	font-size: 16px;
+	font-weight: 500;
+	height: 60px; 
+	color: white !important;   
+	line-height: calc(1.5*14px); 
+	padding-bottom: 20px;
+}
+
+p.see-more a{
+	font-weight: 400;
+	font-size: 14px;
+	color: red !important;
+}
+
+p.see-more a:hover{
+	color: white !important;
+}
+/*---------------------
+ESG
+-----------------------*/
+
+
+/*---------------------
+ABOUT-TEXT
+-----------------------*/
+.about-text {
+	background: transparent; 
+	width: 100%;
+	height: auto;
+}
+
+.about-text .section-title{
+	margin-right: -2%;
+	margin-left: -2%; 
+}
+
+.about-text .section-title img.image{  /*IMG ON MODAL.php*/
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.about-text .section-title h5{ /*EXECUTIVE ... ON MODAL.php*/
+	color: #be9575;
+	font-size: 18px;
+}
+
+.about-text .section-title h2 { /*Salim Limanto ON MODAL.php*/
+	line-height: calc(1.5*40px); 
+	font-size: 40px;
+}
+
+.about-text .section-title p { /*Mr Salim Limanto is ... ON MODAL.php*/
+	white-space: pre-line;
+	text-align: justify;
+	font-weight: 400;   
+	margin: 10px;
+	color: black;
+	font-size: 18px;
+	line-height: calc(1.5*18px);
+} 
+
+.about-text .section-title p.sub { /*Mr Salim Limanto is ... ON MODAL.php*/  
+	font-weight: 600;     
+	color: black;
+	font-size: 24px;
+	line-height: calc(1.5*18px);
+} 
+
+.sidebar {
+	background-color: #d8d8d8;
+	padding-top: 30px;
+	padding-bottom: 30px; 
+}
+
+.sidebar h3{
+	margin-left: 20px;; 
+}
+
+.sidebar .subSidebar{
+	margin-left:40px; 
+	padding-top: 15px;
+	padding-bottom: 15px; 
+} 
+
+.sidebar .subSidebar a {
+	color: #000000;
+} 
+
+.sidebody .subSidebar h5{
+	font-weight: 600;     
+	color: black;
+	font-size: 20px;
+	line-height: calc(1.5*18px);
+	padding-top: 15px;
+} 
+
+.sidebar .subSidebar a.active{
+	color: red;
+	cursor: default;
+}
+
+.sidebody { 
+	padding-left: 30px;
+	padding-top: 30px;
+	padding-bottom: 30px; 
+}
+
+.bodytext{ 
+	white-space: pre-line; 
+	text-align: center; 
+	color: black; 
+	margin-bottom: 0px !important;
+}
+
+.bodytext2{ 
+	white-space: pre-line; 
+	text-align: justify; 
+	color: black; 
+	margin-bottom: 0px !important;
+}
+/*---------------------
+FS-ABOUT
+-----------------------*/
+.fs-about {
+	margin-bottom: 30px;
+}
+/*--------------------------------------------------------------
+# Global
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+NAVBAR.PHP
+--------------------------------------------------------------*/
+/*---------------------
+HEADER-SECTION
+-----------------------*/
+.header-section .container-fluid{
+	background-color: #ffffff;
+	transition: 0.4s; 
+	position: fixed; 
+	top: 0;  
+	z-index: 99;
+	display: flex;
+	justify-content: center; 
+} 
+
+/*---------------------
+LOGO
+-----------------------*/
+.logo {
+	float: left; 
+    padding: 10px 0px 5px;
+    max-width: 24%;
+    margin-left: 10%;
+}
+
+.logo a {
+	display: inline-block;
+} 
+
+/*---------------------
+NAV-MENU
+-----------------------*/
+.slicknav_menu {
+	display: none;
+}
+
+.nav-menu {
+	float: right;
+	margin-right: 10%;
+}
+
+.nav-menu ul li { /*Menu Bar*/
+	list-style: none;
+	display: inline-block;
+	margin-right: 10px;
+	position: relative;
+}
+
+.nav-menu ul li a { /*Menu Bar TEXT*/
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: capitalize;
+	color: #000000;
+	display: block;
+	padding: 32px 3px 30px;
+	position: relative;
+	font-family: "Arial", sans-serif;
+}
+/*
+.nav-menu ul li a:after { 
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 3px;
+	width: 100%;
+	background: #FF0000;
+	content: "";
+	opacity: 0;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+	}*/
+
+	.nav-menu ul li a:hover,
+	.nav-menu ul li.active a,
+	.nav-menu ul li .dropdown li.active a,
+	.nav-menu ul li .dropdown li a:hover{
+		opacity: 1;
+		color: #FF0000;
+	}
+
+	.nav-menu ul li .dropdown {
+		position: absolute;
+		left: 0;
+		top: 105px;
+		background-color:rgb(0, 0, 0, 0.85);
+		width: 280px;
+		z-index: 99;
+		opacity: 0;
+		visibility: hidden;
+		-webkit-transition: all 0.3s;
+		-o-transition: all 0.3s;
+		transition: all 0.3s;
+	}
+
+	.nav-menu ul li:hover .dropdown {
+		top: 86px;
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.nav-menu ul li .dropdown li {
+		display: block;
+		margin-right: 0;
+	} 
+
+	.nav-menu ul li .dropdown li a {
+		color: #ffffff;
+		padding: 5px 18px;
+		font-weight: bold;
+		text-transform: capitalize;
+		position: relative;
+		font-family: "Arial", sans-serif;
+		font-size: 15px
+	}
+
+	.nav-menu ul li .dropdown li a:after {
+		display: none;
+	}
+
+	.nav-menu ul li:hover>a:after,
+	.nav-menu ul li.active a:after {
+		opacity: 1;
+	}    
+
+	.nav-menu ul li.lang {  
+		margin-top: 31px;
+	} 
+
+	.nav-menu ul li.lang:hover>a:after {
+		opacity: 0;
+	}
+
+	.nav-menu ul li.lang a {
+		display: table-cell;
+		padding-top: 0px; 
+		color: #000000;
+	}
+/*---------------------
+GSC-CONTROL-CSE
+-----------------------*/
+.gsc-control-searchbox-only {
+	margin-top: 25px !important;  
+	padding:1px !important;
+	width: 150px !important;
+	background-color: #ffffff !important;
+	border: none !important;
+} 
+
+.gsc-input-box {
+	border: 1px solid #000000 !important;
+	background: #fff;
+	border-radius: 20px !important;
+}
+
+input.gsc-input,
+input.gsc-input::placeholder { 
+	color: #000000;
+}  
+
+.gcsc-more-maybe-branding-root,
+.gsc-adBlock{
+	display: none;
+}
+
+.gsst_a .gscb_a,
+.gsc-control-searchbox-only .gsc-search-button {
+	display: none !important;
+} 
+
+/*--------------------------------------------------------------
+NAVBAR.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+MODAL.PHP
+--------------------------------------------------------------*/
+/*---------------------
+MODAL-DIALOG
+-----------------------*/
+.modal-dialog {
+	max-width: 1000px;
+	margin: 50px auto;
+}
+
+/*---------------------
+MODAL-BODY
+-----------------------*/
+.modal-body {
+	position:relative;
+	padding:0px;
+}
+
+/*---------------------
+CLOSE
+-----------------------*/
+.close { /*X Button on Modal MODAL.PHP*/
+	position:absolute;
+	right:-30px;
+	top:0;
+	z-index:999;
+	font-size:2rem;
+	font-weight: normal;
+	color:#fff;
+	opacity:1;
+}
+
+.close1 { /*X Button on Modal (POPOVER) SCRIPT.PHP*/
+	top:0;
+	z-index:999;
+	font-size:15px;
+	font-weight: 700;
+	text-shadow: 2px 2px #000000;
+	color: white;
+	opacity:1;
+}
+
+.close1:hover{
+	color: #FF0000;
+}
+/*--------------------------------------------------------------
+MODAL.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+BOARD-OF-COMMISSIONERS.PHP
+--------------------------------------------------------------*/
+/*---------------------
+DOT
+-----------------------*/
+.dot {
+	border: 1px solid white;
+	height: 25px;
+	width: 25px;
+	background-color: #bbb;
+	opacity: 0.75;
+	border-radius: 50%; 
+	position: absolute;
+	margin-left: 780px;
+	margin-top: 140px;
+}
+
+.dot:hover{
+	height: 30px;
+	width: 30px;
+	background-color: #bbb;
+	opacity: 1;
+	margin-left: 777px;
+	margin-top: 138px;
+}
+
+.popover{
+	margin-top: 0px;
+	background-color: transparent;
+	border-color: transparent;
+} 
+
+.popover-body{
+	padding-top: 0px;
+}
+
+.popover .arrow{
+	display: none;
+}
+/*--------------------------------------------------------------
+BOARD-OF-COMMISSIONERS.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+SITEMAP.PHP
+--------------------------------------------------------------*/
+.fs-about .fa-logo { /*SITEMAP.PHP*/
+	margin-bottom: 34px;
+}
+
+.testimonial-section img.center {  
+	max-width: 60% !important;
+}
+
+.footer-section {
+	background: #ffffff; 
+	margin: 4% 5% 2%; 
+}
+
+.footer-section h5 {
+	font-size: 20px;
+	color: #000000;
+	font-weight: 700;
+	text-transform: uppercase;
+	margin-bottom: 20px;
+}
+/*--------------------------------------------------------------
+SITEMAP.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+BOARD-OF-DIRECTORS.PHP
+--------------------------------------------------------------*/
+/*---------------------
+FA-LOGO1
+-----------------------*/ 
+.fs-about .fa-logo1 .content {  
+	position: relative;
+	border-style: solid;
+	border-color: #000000;
+	bottom: 0; 
+	background: white; /* Black background with 0.5 opacity */ 
+	width: 100%; 
+	height: 100%; 
+	margin: 20px auto;
+	border-radius: 20px;
+}  
+.fs-about .fa-logo1 .row{
+	padding-top: 20px;
+}
+.fs-about .fa-logo1 img{ 
+	position: relative;  
+	width: 170px;
+	height: 170px;
+	object-fit: contain;
+	margin: 2px 10px 20px;
+} 
+.fs-about .fa-logo1 img.big{ 
+	width: 150vh;
+	height: 30vw;
+} 
+.fs-about .fa-logo1 .fa-name{
+	position: relative; 
+	width: 100%;
+	margin: 40px -10px;
+} 
+.fs-about .fa-logo1 .content p{
+	font-size: 18px;
+	line-height: calc(1.5*18px);
+	margin: 0px;
+}  
+.fs-about .fa-logo1 .fa-name h2{
+	font-size: 30px; 
+	line-height: calc(1.5*30px);
+}  
+.fs-about .fa-logo1 h2.expand{
+	font-size: 45px; 
+	line-height: calc(1.5*45px);
+	margin: 53px 0;
+	cursor: pointer;
+} 
+.word{
+	margin: 0 20px;
+	white-space: pre-line;
+}
+/*--------------------------------------------------------------
+BOARD-OF-DIRECTORS.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+COAL-SHIPPING.PHP
+--------------------------------------------------------------*/
+/*---------------------
+FA-LOGO2
+-----------------------*/
+.fs-about .fa-logo2{
+	text-align: center;
+}
+
+.fs-about .fa-logo2 button{
+	background-size: cover; 
+	background-position: top center; 
+	width: 350px;
+	height: 300px; 
+	margin-top: 20px;
+}
+
+.fs-about .fa-logo2 img{ 
+	margin-top: 20px;
+	padding-right: 20px;
+	padding-left: 20px;
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
+}
+
+.fs-about .fa-logo2 h6 { 
+	padding-top: 20px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.fs-about .fa-logo2 a:hover { 
+	top: 86px;
+	opacity: 1;
+	visibility: visible;
+	color: #FF0000
+}
+
+.fs-about .fa-logo2 p { 
+	text-align: center;
+	margin-bottom: 0px;
+	font-size: 20px;
+}
+/*--------------------------------------------------------------
+COAL-SHIPPING.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+QUALITY-CONTROL.PHP
+--------------------------------------------------------------*/
+/*---------------------
+nav
+-----------------------*/
+nav > .nav.nav-tabs{
+	border: none;
+	color:#fff;
+	background:#272e38;
+	border-radius:0;
+}
+
+nav > div a.nav-item.nav-link
+{
+	border: none;
+	padding: 18px 25px;
+	color:#fff;
+	background:#272e38;
+	border-radius:0;
+}
+
+nav > div a.nav-item.nav-link.active{
+	border: none;
+	padding: 18px 25px;
+	color:#FF0000;
+	background:#000000;
+	border-radius:0;
+}
+
+nav > div a.nav-item.nav-link.active:after
+{ 
+	position: relative;
+	bottom: -60px;
+	left: -10%;
+	border: 15px solid transparent;
+	border-top-color: #000000 ;
+}
+
+.tab-content{
+	background: #F6D8AE;
+	line-height: 25px; 
+	border-top:5px solid #000000; 
+	padding-bottom: 0px !important;
+}
+
+/*GRAPHIC*/
+.highcharts-figure{
+	min-width: 360px; 
+	max-width: 800px;
+	margin: 1em auto;
+}
+
+.highcharts-credits{
+	display: none !important;
+}
+
+.highcharts-data-table{
+	position: relative; 
+	left: -15%;
+	right: -15%;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+.highcharts-data-table caption {
+	padding: 1em 0;
+	font-size: 1.2em;
+	color: #555;
+}
+.highcharts-data-table th {
+	font-weight: 600;
+	padding: 0.5em;
+}
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+	padding: 0.5em;
+}
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+	background: #f8f8f8;
+}
+.highcharts-data-table tr:hover {
+	background: #f1f7ff;
+}
+
+/*GRAPHIC*/
+
+nav > div a.nav-item.nav-link:hover,
+nav > div a.nav-item.nav-link:focus
+{
+	border: none;
+	background: #000000;
+	color:#FF0000;
+	border-radius:0;
+	transition:background 0.20s linear;
+}
+
+.base{
+	padding: 4% 0;
+}
+
+.about-text .section-title p.info{
+	margin: 4% 0%; 
+} 
+/*--------------------------------------------------------------
+QUALITY-CONTROL.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+INDEX.PHP
+--------------------------------------------------------------*/ 
+.hs-slider.owl-carousel .owl-item.active .hs-text p,
+.hs-slider.owl-carousel .owl-item.active .hs-text .primary-btn {
+	top: 0 ; 
+} 
+.normall .owl-nav { 
+	display: contents;
+	height: 350px !important;
+}
+.normall .owl-nav button {
+	position: absolute;
+	color: #ffffff !important;
+	height: 40px;
+	width: 40px;
+	background: rgba(0, 0, 0, 0.5) !important ;
+	border-radius: 50% !important;
+	top: 50%; 
+}
+.normall .owl-nav button:hover{
+	background: rgba(0, 0, 0, 1) !important ;
+}
+.normall .owl-nav span{
+	font-size: 30px;
+	line-height: 0.6 !important; 
+}
+.hs-slider.owl-carousel .owl-nav button.owl-prev {
+	left: 2%; 
+}
+
+.hs-slider.owl-carousel .owl-nav button.owl-next {
+	right: 2%;
+}   
+
+.hs-item { 
+	height: 650px;  
+	overflow: hidden;  
+	background-size: cover; 
+}
+
+img.carousel{
+	height: 650px !important;
+	object-fit: cover;
+}
+
+.zoom { 
+	transition: transform .2s; /* Animation */
+	width: 200px;
+	height: 200px;
+	margin: 0 auto;
+}
+
+.zoom:hover {
+	transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+	z-index: 4;
+}
+
+.carouseelll {
+	display: contents !important; 
+}
+
+.wrapper{
+	box-sizing: content-box;
+	width: fit-content; 
+}
+
+.hs-text {
+	position: relative;
+	background-size: contain;
+	background-position: left;
+	width: auto;
+	height: auto;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	box-sizing: border-box;
+	width: fit-content; 
+	background-color: rgb(255, 0, 0, 0.5);
+} 
+
+.hs-item .hs-text p {
+	color: #ffffff;
+	display: contents;
+	line-height: calc(1.5*36px);
+	font-weight: 400;
+	text-shadow: 2px 2px #000000;
+	font-size: 36px;
+	position: relative; 
+	-webkit-transition: all 0.5s ease-out;
+	-o-transition: all 0.5s ease-out;
+	transition: all 0.5s ease-out;   
+	font-family: Arial, Helvetica, sans-serif; 
+}
+
+.hs-item .hs-text span.color {
+	position: relative; 
+	display: contents;
+	color: rgb(255, 255, 255);
+}
+
+.hs-item .hs-text span.smaller {
+	position: relative; 
+	display: contents;
+	font-size: 26px;
+}
+
+.buttonNews{
+	display: flex;
+	justify-content: center;
+}
+
+/* .hs-item .hs-text .primary-btn {
+	position: relative;
+	top: 100px;
+	-webkit-transition: all 0.7s ease-out;
+	-o-transition: all 0.7s ease-out;
+	transition: all 0.7s ease-out; 
+	margin-top: 10px;
+	margin-left: 80px;
+	border-color: #2680fc;
+	} */
+
+	.services { /*INDEX.PHP*/
+		position: relative;  
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-bottom: 30px; 
+	}
+
+	.services::before {    
+		content: ""; 
+		background-color: rgb(119, 136, 153, 0.85);
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 0px;
+		opacity: 0.3;
+	}
+
+	.services .icon-box {
+		margin-bottom: 20px;  
+	}
+
+	.services .icon-box h4 { 
+		font-weight: 700;
+		margin-bottom: 15px;
+		font-size: 25px;
+	}
+
+	.services .icon-box h4 a,
+	.section-title .table td a.download {
+		color: #007bff; 
+		transition: 0.3s;
+		float: right;
+		font-size: 16px;
+		padding-top: 8px;
+		text-decoration: underline;
+		font-weight: 700;
+	}
+
+	.section-title a:hover,
+	.services .icon-box h4 a:hover,
+	.services .table td a:hover,
+	.section-title .table td a.download:hover {
+		color: #325b91;
+	}
+
+	.services .table td,
+	.section-title .table td{
+		text-align: left;
+		font-size: 16px;
+		color: #FF0000;
+	}
+
+	.section-title .table tr.color td{ 
+		color: #000000;
+	}
+
+	.services .table td:first-child,
+	.section-title .table td:first-child{
+		width: 65px;
+	}
+
+	.services .table td img,
+	.section-title .table td img{
+		height:50px;
+	}
+
+	.services .table td a,
+	.section-title .table td a{
+		color: black;
+		font-size: 20px;
+	}
+/*--------------------------------------------------------------
+INDEX.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+CONTACT.PHP
+--------------------------------------------------------------*/
+.recontain{
+	max-width: 1300px;  
+	padding-top: 4rem ;
+}
+
+.background{
+	flex: 1; 
+	color: #ffffff;   
+	/* padding: 14px 12px;   */
+}
+.contact-text h4 {
+	color: #111111;
+	font-weight: 700;
+	text-transform: uppercase;
+	margin-bottom: 15px;
+}
+
+.contact-text.news {
+	margin-left: 30px;
+}
+
+.contact-text p {
+	color: #111111;
+	margin-bottom: 32px;
+} 
+
+.contact-text .ct-item {
+	overflow: hidden;
+	margin-bottom: 30px;
+}
+
+.contact-text .ct-item .ct-icon {
+	height: 80px;
+	width: 80px;
+	background: #009603;
+	border-radius: 50%;
+	font-size: 40px;
+	line-height: 80px;
+	text-align: center;
+	color: #ffffff;
+	float: left;
+	margin-right: 30px;
+}
+
+.contact-text .ct-item .ct-text {
+	overflow: hidden;
+	padding-top: 12px;
+}
+
+.contact-text .ct-item .ct-text h5 {
+	font-size: 20px;
+	color: #111111;
+	font-weight: 700;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+} 
+
+.pad20 .image { 
+	height:150px;
+	width:150px;
+	display: flex; 
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 3px solid black;
+	margin: auto;
+}
+
+img.sign{     
+	width: 70%;
+	height: 70%;  
+} 
+
+.contact-text .ct-item .ct-text ul li {
+	list-style: none;
+	display: inline-block;
+	margin-right: 30px;
+	font-size: 15px;
+	color: #444444;
+	position: relative;
+}
+
+.contact-text .ct-item .ct-text ul li:after {
+	position: absolute;
+	right: -20px;
+	top: -2px;
+	content: "|";
+}
+
+.contact-text .ct-item .ct-text ul li:last-child {
+	margin-right: 0;
+}
+
+.contact-text .ct-item .ct-text ul li:last-child:after {
+	display: none;
+}
+
+.contact-text .ct-item .ct-text a.see_more{
+	color: #007bff; 
+	transition: 0.3s; 
+	text-decoration: underline;
+	font-weight: 700;
+}
+
+.contact-text .ct-item .ct-text a.see_more:hover {
+	color: #325b91;
+}
+
+.contact-text .ct-item .ct-text p.date {
+	font-size: 10px;
+	margin-bottom: 0px;
+}
+
+.contact-form h3 {
+	color: #000000;
+	font-weight: 700;
+	text-transform: uppercase;
+	margin-bottom: 35px;
+}
+
+.contact-form form input {
+	height: 50px;
+	width: 100%;
+	padding-left: 20px;
+	font-size: 14px;
+	color: #444444;
+	background: transparent;
+	margin-bottom: 30px;
+	border: 1px solid #e1e1e1;
+}
+
+.contact-form form input::-webkit-input-placeholder,
+.contact-form form input::-moz-placeholder,
+.contact-form form input:-ms-input-placeholder,
+.contact-form form input::-ms-input-placeholder,
+.contact-form form input::placeholder,
+.contact-form form textarea::-webkit-input-placeholder,
+.contact-form form textarea::-moz-placeholder,
+.contact-form form textarea:-ms-input-placeholder,
+.contact-form form textarea::-ms-input-placeholder,
+.contact-form form textarea::placeholder{
+	color: #444444;
+}  
+
+.contact-form form textarea {
+	width: 100%;
+	padding-left: 20px;
+	padding-top: 12px;
+	height: 100px;
+	font-size: 14px;
+	color: #444444;
+	background: transparent;
+	resize: none;
+	border: 1px solid #e1e1e1;
+	margin-bottom: 24px;
+} 
+/*--------------------------------------------------------------
+CONTACT.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+GROWTH-JOURNEY.PHP
+--------------------------------------------------------------*/
+/*.uk-section { 
+	width: 80%;
+	display: block;
+	position: relative;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.uk-card-primary {
+	border-radius: 8px;
+	height: 500px;
+	background: #111;
+} 
+.uk-card img{
+	object-fit: fill; 
+	height: 200px;
+}
+.uk-card button{
+	font-size: 12px;
+	position: absolute;
+	bottom: 35px;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	background: #111;
+	border-radius: 8px;
+}
+.uk-card h3 {
+	font-size: 24px;
+	margin-top: 10px;
+	text-align: center;
+}
+.uk-card > :last-child {
+	margin-top:0;
+	margin-bottom: 10px;
+}
+.uk-card p {
+	font-size: 14px;
+	margin-bottom: 0;
+	text-align: center;
+}
+.uk-card-title {
+	padding-bottom: 20px;
+	}*/
+	.timeline {
+		list-style: none;
+		position: relative;
+	}
+
+	.timeline:before { /*Garis Tengah*/
+		position: absolute;
+		top: 4%;
+		bottom: 8%;
+		content: " ";
+		width: 3px;
+		background-color: #000000;
+		left: 50%;
+		margin-left: -1.5px;
+	}
+
+	.timeline > li { /*Space Antar li*/
+		margin-bottom: 25px;
+		min-height: 180px;
+		position: relative;
+	}
+
+	.timeline > li:before,
+	.timeline > li:after {
+		content: " ";
+		display: table;
+	}
+
+	.timeline > li:after {
+		clear: both;
+	}
+
+	.timeline > li > .timeline-panel {
+		position: relative; 
+		width: 42%;
+		padding: 0 20px;
+		text-align: right; 
+		min-height: 180px;
+	}
+	.timeline > li > .timeline-badge {
+		position: absolute;
+		z-index: 2;
+		left: 50%;
+		color: white;
+		width: 150px;
+		height: 150px;
+		line-height: calc(1.5*1.4em);
+		font-size: 1.4em;
+		text-align: center;
+		margin-left: -75px;		
+		border: 3px solid #000000;
+		background-color: #000000;
+		border-radius: 100%;
+	} 
+	.timeline > li.timeline-inverted > .timeline-panel {
+		right:0;
+		padding: 0 20px;
+		float: right;
+		text-align: left;
+		min-height: 180px;
+	}
+	.timeline > li:last-child {
+		margin-bottom: 0;
+	}
+	.timeline-title {
+		margin-top: 0;
+		color: inherit;
+		font-size: 20px;
+		line-height: calc(1.5*20px);
+	}
+	.timeline-heading p{
+		font-weight: bold;
+		line-height: calc(1.5*18px);
+		font-size: 18px;
+	}
+	.timeline-body > p,
+	.timeline-body > ul {
+		white-space: pre-line;
+		margin-bottom: 0;
+		font-size: 16px;
+		line-height: calc(1.5*16px);
+		margin-top: 5px;
+	}
+	.timeline-body > p + p {
+		white-space: pre-line;
+		margin-top: 5px;
+	}
+
+	.timeline-image{
+		padding: 4% 0;
+	}
+	.about-text .section-title p.detail{
+		margin: 21% 0;
+		padding: 0 4%;
+	} 
+
+/*--------------------------------------------------------------
+GROWTH-JOURNEY.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+SITEMAP.PHP
+--------------------------------------------------------------*/
+.fs-widget {
+	/*margin-bottom: 30px;*/
+	overflow: hidden;
+}
+
+.fs-widget ul {
+	width: 100%;
+	float: left;
+}
+
+.fs-widget ul li {
+	list-style: none;
+}
+
+.fs-widget ul li.sub {
+	margin-left: 25px;
+	width: 100%;
+}
+
+.fs-widget ul li a {
+	font-size: 22px;
+	color: #000000;
+	line-height: calc(1.5*22px);
+	width: 100%;
+}
+
+.fs-widget ul li.sub a{
+	color: #000000;
+	font-size: 18px;
+	line-height: calc(1.5*18px);
+}
+
+.fs-widget ul li a :hover {
+	top: 86px;
+	opacity: 1;
+	visibility: visible;
+	color: #FF0000;	
+}
+
+.fs-widget ul li.sub a:hover{
+	color: #FF0000;
+}
+
+.fs-widget p {
+	color: #FF0000;
+}
+/*--------------------------------------------------------------
+SITEMAP.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+FOOTER.PHP
+--------------------------------------------------------------*/
+/*---------------------
+BACK TO TOP BUTTON 
+-----------------------*/
+.back-to-top {
+	position: fixed; 
+	right: 15px;
+	bottom: 15px;
+	z-index: 99999;
+}
+
+.back-to-top i {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 30px;
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+	background: rgba(255, 255, 255, 0.75);
+	color: #000000;
+	transition: all 0.4s;
+}
+
+.back-to-top i:hover {
+	background: rgba(255, 255, 255, 1);
+	color: #FF0000;
+}
+
+/*---------------------
+FOOTER-SECTION
+-----------------------*/
+.footer-section1 {
+	background: #000000; 
+}
+/*---------------------
+COPYRIGHT-TEXT
+-----------------------*/
+.copyright-text { 
+	font-size: 15px;
+	color: #ffffff;
+	text-align: center;
+	border-top: 1px solid #000000;
+	padding: 30px 0; 
+	line-height: calc(1.5*15px);
+}
+
+.copyright-text p{
+	font-weight: 500; 
+	color: #ffffff;
+	font-family: "Work Sans", sans-serif;
+}
+
+.copyright-text a{
+	color: #ffffff;
+}
+
+.copyright-text a:hover{
+	color: #FF0000;
+}
+/*--------------------------------------------------------------
+FOOTER.PHP
+--------------------------------------------------------------*/
+
+/*--------------------------------- Responsive Media Quaries -----------------------------*/ 
+@media only screen and (max-width: 1900px){
+	.nav-menu {
+	    margin-right: 5%;
+	}
+	.logo{
+		margin-left: 5%;   
+	    max-width: 32%;
+    	padding-top: 13px;
+	}
+	.hs-item {
+		height: 100%;
+	}
+}
+@media only screen and (max-width: 1399px){
+	.nav-menu {
+	    margin-right: 5%;
+	}
+	.logo{
+		margin-left: 5%;   
+	    max-width: 32%;
+    	padding-top: 13px;
+	}
+	
+	/*INDEX*/
+	.hs-item{
+		height: fit-content	;
+	}
+	.cta-section .text{
+		margin: 0 50px;
+	} 
+	.cta-text h2 {
+		font-size: 30px; 
+		width: 600px;
+	} 
+	.cta-text p {
+		font-size: 16px; 
+		width: 500px;
+	}
+	.spad3{
+		height: 450px;
+	}
+	/*INDEX*/
+	/*VISION AND MISSION*/
+	.testimonial-section .quotes1::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		left: -5%;
+	} 
+	.testimonial-section .quotes1::after { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		right: -4%;
+	} 
+	/*VISION AND MISSION*/
+	/*SUB HEADING*/
+	.testimonial-section .section-title { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		margin-right: 17%;
+		margin-left: 17%;  
+	} 
+	.testimonial-section .section-title h4{  /*TEXT ON SUB HEADING  EX: With a track record of.. ON about-us.php*/
+		font-size: 18px;
+		line-height: calc(1.5*18px);
+	}
+	.testimonial-section .quotes::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+		top: 50px;
+		left: 15%; 
+	} 
+	.testimonial-section .quotes::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+		right: 15%; 
+		bottom: -50px;
+	} 
+	/*SUB HEADING*/ 
+	/*BODY*/
+	.about-text .section-title p{
+		margin: 0 -25px;
+		font-size: 15px;
+		line-height: calc(1.5*15px);
+	}
+	/*BODY*/
+	/*TIMELINE*/
+	.timeline-image{
+		margin-left: 15%;
+	}
+	/*TIMELINE*/  
+	.testimonial-section .quotes2::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		left: 19%; 
+	}  
+	.testimonial-section .quotes3::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		left: 23%; 
+	}   
+	.testimonial-section img.center {    
+		margin: auto;
+		max-width: 100% !important;
+	}
+}
+@media only screen and (max-width: 1280px){
+	
+	.testimonial-section .quotes3::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		top: 50px;
+		left: 18%; 
+	} 	
+	.nav-menu {
+	    margin-right: 0.3%;
+	}
+	.logo{
+		margin-left: 0.3%;   
+	    max-width: 32%;
+    	padding-top: 16px;
+	}
+}
+
+/* Medium Device = 1200px */
+@media only screen and (max-width: 1100px) {
+	/*NAVBAR*/
+	.slicknav_menu { /*ALL NAVBAR*/
+		display: block;
+		background: transparent;
+	}
+	.logo {  
+		padding: 6px 0px 0px;
+    	max-width: 36%;
+	}
+	.slicknav_menu .slicknav_menutxt { /*Tulisan Menu*/
+		display: none; 
+	}
+	.slicknav_btn { /*Button Untuk Icon*/
+		margin: 25px 25px 15px; 
+		background-color: transparent;
+		padding: 0; 
+	}
+	.slicknav_menu .slicknav_icon-bar { /*Icon*/
+		background-color: #000000;
+		width: 20px;
+		height: 3px;
+	} 
+	/*Bagian Dalam Setelah Button di Tekan*/
+	.slicknav_nav ul.nav { 
+		margin: 0;
+	}
+	.slicknav_nav .slicknav_arrow{ 
+		float: right;
+	} 
+	.slicknav_nav .slicknav_row,
+	.slicknav_nav a {
+		font-weight: bold;
+		padding: 8px 30px; /*8px Top and Bottom, 30px left and Right*/
+		margin: 0; 
+		color: #000000;
+	}
+	.slicknav_nav ul.dropdown {
+		margin-left: 10px;
+	}
+	.slicknav_nav ul li.lang a {
+		border: none !important;
+		border-top-right-radius: 0 !important;
+		border-bottom-right-radius: 0 !important;
+		padding-left: 30px !important;
+	}
+	.gsc-control-searchbox-only {
+		margin-top: 0px !important; 
+		width: auto !important; 
+		padding: 8px 30px !important; 
+	}  
+	.gsc-input-box {
+		margin-top: 3px !important; 
+		background: transparent; 
+	} 
+	/*Bagian Dalam Setelah Button di Tekan*/
+	/*Navbar Awal*/
+	.header-section .container-fluid{
+		position: relative;
+	}
+	.nav-menu {
+		display: none;
+	}
+	/*Navbar Awal*/
+	/*NAVBAR*/
+	/*Index*/
+	.hs-item {
+		margin-top: 0px; 
+	}  
+	.normall .owl-nav button{
+		top: 40%;
+	}
+	/*Index*/
+	/*SUB HEADING*/
+	.cta-section {
+		margin-top: 0px;
+	} 
+	.cta-text h2 {
+		font-size: 20px; 
+		width: 500px;
+	} 
+	.cta-text p {
+		font-size: 15px; 
+		width: 400px;
+	} 
+	.spad3{
+		height: 400px;
+	}
+	/*SUB HEADING*/ 
+	/*TIMELINE*/
+	.timeline > li > .timeline-panel {
+		left:-5px;
+		padding: 0 20px 0 30px;
+	}
+	.timeline > li.timeline-inverted > .timeline-panel {
+		left: 5px;
+		padding: 0 30px 0 20px;
+	}   
+	/*TIMELINE*/
+	.testimonial-section .quotes3::before { /*SUB HEADING BOX EX: coal-shipping.php*/  
+		left: 16%; 
+	} 
+	.about-text {
+		padding-left: 30px;
+		padding-right: 30px; 
+		height: auto;
+	}  
+	.fs-about .fa-logo2 button{
+		background-size: cover; 
+		background-position: top center; 
+		width: 300px;
+		height: 250px; 
+		margin-top: 20px;
+	}  
+	.about-text .section-title p.detail{
+		margin: 12% 0; 
+	} 
+	.about-text .section-title h5{
+		padding-top: 10px;
+		font-size: 15px; 
+	}
+	.about-text .section-title h2{
+		line-height: calc(1.5*32px);
+		font-size: 32px;  
+	} 
+	.fs-about{
+		margin-bottom: 5px;
+	}  
+	.close1 { 
+		font-size:13px;
+	}
+	.modal-dialog {
+		max-width: 850px; 
+	}   
+	.highcharts-data-table{
+		left: 0%;
+		right: 0%;
+		overflow: scroll;
+	}
+	.sidebar{
+		display: none;
+	}
+} 
+@media only screen and (max-width: 980px) {
+	/*INDEX*/
+	.hs-item .hs-text p {
+		line-height: calc(1.5*29px);
+		font-size: 29px; 
+	}
+	.hs-item .hs-text span.smaller {
+		font-size: 21px;
+	} 
+	/*INDEX*/
+	.cta-text h2 { 
+		width: 400px;
+	} 
+	.cta-text p { 
+		width: 300px;
+	} 
+	.spad3{
+		height: 350px;
+	}
+	/*VISION AND MISSION*/
+	.testimonial-section .quotes1::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		left: -5%; 
+	} 
+	.testimonial-section .quotes1::after { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		right: -5%; 
+	}  
+	.Phylo{
+		padding-left: 8%;
+	}
+	/*VISION AND MISSION*/
+	/*SUB HEADING*/ 
+	.about-text .section-title h2{
+		line-height: calc(1.5*24px);
+		font-size: 24px;  
+	}  
+	/*.col-md-6 { 
+		flex: none !important;
+		max-width: none !important;
+	}*/
+	/*SUB HEADING*/
+	/*TIMELINE*/
+	.timeline-image {
+		padding: 0% 10%;
+		margin: 0% 6%;
+	}
+	/*TIMELINE*/  
+	.testimonial-section .quotes2::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		top: 50px;
+		left: 16%; 
+	}  
+	.fs-about .fa-logo1 img{
+		width: 130px;
+		height: 130px;
+		margin: 2px -12px;
+	}
+	.fs-about .fa-logo1 .fa-name{
+		margin: 39px -22px;
+	}
+	.fs-about .fa-logo1 .content p{
+		font-size: 12px;
+		line-height: calc(1.5*12px);
+	}  
+	.fs-about .fa-logo1 .fa-name h2{
+		font-size: 25px; 
+		line-height: calc(1.5*25px);
+	}    
+	.fs-about{
+		margin-bottom: 5px;
+	} 
+	.logo {
+	    max-width: 53%;
+	}
+}
+
+/* Tablet Device = 768px */
+@media only screen and (max-width: 768px) {  
+	/*INDEX*/
+	.hs-text{
+		width: 45%;
+		margin-left: 13%;
+	} 
+	.hs-item .hs-text p {
+		line-height: calc(1.5*25px);
+		font-size: 25px; 
+	}
+	.hs-item .hs-text span.smaller {
+		font-size: 23px;
+	}
+	/*INDEX*/
+	.cta-text h2 {
+		font-size: 16px;  
+		width: 300px;
+	} 
+	.cta-text p {
+		font-size: 14px; 
+		width: 250px; 
+	} 
+	/*SUB HEADING*/ 
+	.centertxt{
+		text-align: center !important; 
+    	padding-bottom: 10px !important;
+	}
+	.testimonial-section .section-title { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		margin-right: 10%;
+		margin-left: 10%;  
+	}  
+	.testimonial-section .quotes::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+		left: 8%; 
+	} 
+	.testimonial-section .quotes::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+		right: 8%; 
+	} 
+	/*SUB HEADING*/
+	/*TIMELINE*/
+	.timeline:before,
+	.timeline > li > .timeline-badge  {   
+		left: 15%; 
+	} 
+	.timeline > li > .timeline-panel,
+	.timeline > li.timeline-inverted > .timeline-panel { 
+		width: 70%;
+		left: 25%; 
+		padding: 0 20px 0 30px;
+		text-align: left;
+		float: left;
+	}
+	/*TIMELINE*/
+	.testimonial-section .quotes2::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		top: 43px;
+		left: 10%; 
+	} 
+	.testimonial-section .quotes3::before { /*SUB HEADING BOX EX: coal-shipping.php*/  
+		top: 36px;
+    	left: 10%;
+	} 
+	.col-sm-3,
+	.col-sm-8,
+	.col-sm-1{
+		flex: none !important;
+		max-width: 100% !important;
+		text-align: center !important; 
+	} 
+	.fs-about .fa-logo1 img{ 
+		margin: 10px 0;
+	}
+	.fs-about .fa-logo1 .fa-name{
+		margin: -13px 0px;
+	}
+	.fs-about .fa-logo1 h2.expand{ 
+		margin: 0;
+	} 
+	.fs-about{
+		margin-bottom: 5px;
+	}   
+	.close1 { 
+		font-size:12px;
+	}
+	.modal-dialog {
+		max-width: 530px; 
+	}   
+	.contact-text,
+	.contact-form{
+		margin-left: 10%;
+		margin-right: 10%;
+	} 
+	.logo {
+	    max-width: 68%;
+	}
+}
+
+
+/* Wide Mobile = 600px */
+@media only screen and (max-width: 600px) { 
+	/*NAVBAR*/
+	.logo {
+    	padding: 9px 0px 0px;
+	}
+	/*NAVBAR*/
+	/*INDEX*/
+	.hs-item .hs-text p {
+		line-height: calc(1.5*23px);
+		font-size: 23px; 
+	}
+	.normall .owl-nav button{
+		top: 35%;
+	}
+	.hs-item .hs-text span.smaller {
+		font-size: 20px;
+	}
+	/*INDEX*/  
+	/*VISION AND MISSION*/
+	.testimonial-section .height{
+		height: 100%;
+    	padding-top: 30px;
+	} 
+	.Phylo{
+		margin: 16px 3px;
+	} 
+	/*VISION AND MISSION*/
+	.cta-text h2 {
+		font-size: 16px;  
+		width: 300px;
+	} 
+	.cta-text p {
+		font-size: 14px; 
+		width: 250px; 
+	} 
+	/*TIMELINE*/
+	.timeline:before { /*Garis Tengah*/      
+		left: 16%; 
+    	bottom: 10%;
+	} 
+	.timeline > li > .timeline-badge  { /*Garis Tengah*/      
+		left: 18%;
+		width: 125px;
+		height: 125px;
+	}   
+	/*TIMELINE*/ 
+	.fs-about .fa-logo1 img{ 
+		width: 100px;
+		height: 100px;
+		margin: 5px 0;
+	}
+	.fs-about .fa-logo1 .fa-name{
+		margin: -5px 0px;
+	}
+	.fs-about .fa-logo1 h2.expand{ 
+		font-size: 40px;
+		line-height: calc(1.5*40px);
+	} 
+	.fs-about .fa-logo1 .fa-name h2{
+		font-size: 25px;
+		line-height: calc(1.5*25px);
+	}  
+	.fs-about .fa-logo1 .content p{
+		font-size: 12px;
+		line-height: calc(1.5*12px);
+	}   
+	.fs-about{
+		margin-bottom: 5px;
+	}    
+	.pad20{
+		padding-top: 20px;
+	}
+}
+
+/* Small Device = 480px */
+@media only screen and (max-width: 480px) { 
+	/*NAVBAR*/ 
+	.logo{
+		padding: 6px 3px 0px;
+    	max-width: 75%;
+	}
+	.slicknav_btn { /*Button Untuk Icon*/
+		margin: 10px 25px 10px; 
+		background-color: transparent;
+		padding: 0; 
+	}
+	.slicknav_menu .slicknav_icon-bar { /*Icon*/
+		background-color: #000000;
+		width: 15px;
+		height: 2px;
+	} 
+	/*NAVBAR*/
+	/*INDEX*/
+	.hs-text { 
+		width: 65%;
+		margin-left: 15%; 
+	} 
+	/*INDEX*/ 
+	/*SUB HEADING*/ 
+	.centertxt{
+		text-align: center !important; 
+    	padding-bottom: 10px !important;
+	}
+	.testimonial-section .section-title { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		margin-right: 10%;
+		margin-left: 10%;  
+	}  
+	.testimonial-section .quotes::before { /*SUB HEADING BOX EX: coal-shipping.php*/
+		top: 35px; 
+	} 
+	.testimonial-section .quotes::after { /*SUB HEADING BOX EX: coal-shipping.php*/
+		bottom: -60px; 
+	} 
+	/*SUB HEADING*/	
+	/*TIMELINE*/
+	.timeline:before { /*Garis Tengah*/      
+		left: 17%;  
+		bottom: 16%;
+	} 
+	.timeline > li > .timeline-badge  { /*Garis Tengah*/      
+		left: 22%;
+		width: 100px;
+		height: 100px;
+	}   
+	/*TIMELINE*/
+	/*SUBHEADER in EVERY PAGE*/
+	/*YEAR*/
+	.testimonial-section .quotes2::before { /*SUB HEADING BOX EX: coal-shipping.php*/ 
+		top: 28px;
+	} 
+	.testimonial-section .quotes3::before { /*SUB HEADING BOX EX: coal-shipping.php*/  
+		top: 28px;
+	} 
+	p.hidden, img.hidden{
+		display: none;
+	}
+	/*YEAR*/
+	.fs-about{
+		margin-bottom: 5px;
+	}   
+	.contact-text,
+	.contact-form{
+		margin-left: 5%;
+		margin-right: 5%;
+	}   
+	.highcharts-figure{
+		min-width: auto !important;
+		max-width: auto !important;
+	}
+	.highcharts-figure #container{
+		overflow: visible !important; 
+	}
+	.highcharts-container {
+		width: 100% !important;
+		height: 100% !important; 
+	} 
+} 
