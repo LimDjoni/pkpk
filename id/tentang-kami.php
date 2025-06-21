@@ -1,8 +1,10 @@
 <!-- Header -->
-<?php $title = "Profil Perusahaan | PKPK";
+<?php 
+$title = "Profil Perusahaan | PKPK";
 $page = "about-us"; 
 include 'include/header.php'; 
-include_once (PROJECT_ROOT_PATH . '/../../Controller/companyprofileController.php'); 
+include_once(PROJECT_ROOT_PATH . '/../../Controller/companyprofileController.php'); 
+
 $companyprofile = new companyprofileController();
 $CPdata = $companyprofile->getData();
 ?>
@@ -15,32 +17,34 @@ $CPdata = $companyprofile->getData();
 	</div>
 
 	<!-- Navbar -->
-	<?php include 'include/navbar.php' ?>
+	<?php include 'include/navbar.php'; ?>
 	<!-- Navbar -->
 
 	<!-- Subheader -->
-	<?php include 'include/subheader.php' ?>
+	<?php include 'include/subheader.php'; ?>
 	<!-- Subheader -->
 
-	<?php for($i=0; $i< count($CPdata); $i++){ ?>
-		<!-- Testimoial Section Begin -->
-		<section class="testimonial-section">
-			<div class="container">
-				<div class="row">
-					<div class="about-text">
-						<div class="section-title"> 
-							<p><?php echo $CPdata[$i]['body_indo']; ?></p>
-						</div>
+	<!-- Company Profile Section -->
+	<section class="testimonial-section">
+		<div class="container">
+			<div class="row">
+				<div class="about-text">
+					<div class="section-title">
+						<?php if (!empty($CPdata) && is_array($CPdata)) { ?>
+							<?php foreach ($CPdata as $item) { ?>
+								<p><?php echo htmlspecialchars($item['body_indo'], ENT_QUOTES, 'UTF-8'); ?></p>
+							<?php } ?>
+						<?php } else { ?>
+							<p>Tidak ada data yang ditemukan.</p>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
-		</section>
-		<!-- Testimonial Section End -->
-	<?php } ?>
+		</div>
+	</section>
 
 	<!-- Footer -->
-	<?php include 'include/footer.php' ?>
+	<?php include 'include/footer.php'; ?>
 	<!-- Footer -->
 </body>
-
 </html>

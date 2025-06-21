@@ -50,18 +50,18 @@ $Peopledata = $people->getData();
 					<div class="about-text">
 						<div class="section-title"id="Mining">   
 							<div class="fs-about">  
-								<img src="../admin/assets/img/management/<?php echo $managementDt[$n]['Overview']; ?>" class="center"> 
+								<img loading="lazy" src="../admin/assets/img/management/<?php echo $managementDt[$n]['Overview']; ?>" class="center"> 
 							</div> 
 						</div>   
 						<div class="section-title"id="Equipment" style="display: none;"> 
 							<div class="fs-about"> 
 								<div class="fa-logo1"> 
-								<img class="big" src="../admin/assets/img/people/Komisioner.jpg" > 
+								<img loading="lazy" class="big" src="../admin/assets/img/people/Komisioner.jpg" > 
 									<p><?php echo $managementDt[$n]['bocIndo']; ?></p>
 									<?php $temp = 0; for($j=0; $j < count($Komisarisdata); $j++){  ?>
 										<div class="content row">  
 											<div class="col-sm-3">
-												<img class="img-rounded" src="../admin/assets/img/people/<?php echo $Komisarisdata[$j]['Img']; ?>" alt="" >
+												<img loading="lazy" class="img-rounded" src="../admin/assets/img/people/<?php echo $Komisarisdata[$j]['Img']; ?>" alt="" >
 											</div>
 											<div class="col-sm-8">
 												<div class="fa-name"> 
@@ -83,12 +83,12 @@ $Peopledata = $people->getData();
 							<div class="section-title"id="Land" style="display: none;">  
 								<div class="fs-about"> 
 									<div class="fa-logo1">
-										<img class="big" src="../admin/assets/img/people/Direksi.jpg" > 
+										<img loading="lazy" class="big" src="../admin/assets/img/people/Direksi.jpg" > 
 										<p><?php echo $managementDt[$n]['bodIndo']; ?></p>
 										<?php for($k=0; $k < count($Direksidata); $k++){  ?>
 											<div class="content row">  
 												<div class="col-sm-3">
-													<img class="img-rounded" src="../admin/assets/img/people/<?php echo $Direksidata[$k]['Img']; ?>" alt="" >
+													<img loading="lazy" class="img-rounded" src="../admin/assets/img/people/<?php echo $Direksidata[$k]['Img']; ?>" alt="" >
 												</div>
 												<div class="col-sm-8">
 													<div class="fa-name"> 
@@ -114,7 +114,7 @@ $Peopledata = $people->getData();
 											<?php for($l=0; $l < count($KAdata); $l++){  ?>
 												<div class="content row">  
 													<div class="col-sm-3">
-														<img class="img-rounded" src="../admin/assets/img/people/<?php echo $KAdata[$l]['Img']; ?>" alt="" >
+														<img loading="lazy" class="img-rounded" src="../admin/assets/img/people/<?php echo $KAdata[$l]['Img']; ?>" alt="" >
 													</div>
 													<div class="col-sm-8">
 														<div class="fa-name"> 
@@ -141,7 +141,7 @@ $Peopledata = $people->getData();
 													for($m=0; $m < count($SPdata); $m++){  ?>
 													<div class="content row">  
 														<div class="col-sm-3">
-															<img class="img-rounded" src="../admin/assets/img/people/<?php echo $SPdata[$m]['Img']; ?>" alt="" >
+															<img loading="lazy" class="img-rounded" src="../admin/assets/img/people/<?php echo $SPdata[$m]['Img']; ?>" alt="" >
 														</div>
 														<div class="col-sm-8">
 															<div class="fa-name"> 
@@ -174,3 +174,111 @@ $Peopledata = $people->getData();
 				</body>
 
 				</html> 
+
+<script>
+	function miningFunction(elem) {
+		var a = document.getElementById("Mining");
+		var b = document.getElementById("Equipment");
+		var c = document.getElementById("Land");
+		var d = document.getElementById("Construction");
+		var e = document.getElementById("Cus");
+		var btn = document.getElementsByTagName("button")
+		for (i = 0; i < btn.length; i++) {
+			btn[i].classList.remove('active');
+		}
+		elem.classList.add('active');
+		if (a.style.display === "none") {
+			a.style.display = "flex";  
+			b.style.display = "none"; 
+			c.style.display = "none"; 
+			d.style.display = "none";     
+			e.style.display = "none";   
+		} else {
+			// a.style.display = "none";
+		}
+	}
+	function equipmentFunction(elem) {
+		var a = document.getElementById("Mining");
+		var b = document.getElementById("Equipment");
+		var c = document.getElementById("Land");
+		var d = document.getElementById("Construction");
+		var e = document.getElementById("Cus");
+		var btn = document.getElementsByTagName("button")
+		for (i = 0; i < btn.length; i++) {
+			btn[i].classList.remove('active');
+		}
+		elem.classList.add('active');
+		if (b.style.display === "none") {
+			a.style.display = "none";  
+			b.style.display = "flex"; 
+			c.style.display = "none"; 
+			d.style.display = "none";    
+			e.style.display = "none"; 
+		} else {
+			// b.style.display = "none";
+		}
+	}
+	function landPreparationFunction(elem) {
+		var a = document.getElementById("Mining");
+		var b = document.getElementById("Equipment");
+		var c = document.getElementById("Land");
+		var d = document.getElementById("Construction");
+		var e = document.getElementById("Cus");
+		var btn = document.getElementsByTagName("button")
+		for (i = 0; i < btn.length; i++) {
+			btn[i].classList.remove('active');
+		}
+		elem.classList.add('active');
+		if (c.style.display === "none") {
+			a.style.display = "none"; 
+			b.style.display = "none"; 
+			c.style.display = "flex"; 
+			d.style.display = "none";  
+			e.style.display = "none";   
+		} else {
+			// c.style.display = "none";
+		}
+	}
+	function constructionFunction(elem) {
+		var a = document.getElementById("Mining");
+		var b = document.getElementById("Equipment");
+		var c = document.getElementById("Land");
+		var d = document.getElementById("Construction");
+		var e = document.getElementById("Cus");
+		var btn = document.getElementsByTagName("button")
+		for (i = 0; i < btn.length; i++) {
+			btn[i].classList.remove('active');
+		}
+		elem.classList.add('active');
+		if (d.style.display === "none") {
+			a.style.display = "none"; 
+			b.style.display = "none"; 
+			c.style.display = "none"; 
+			d.style.display = "flex";  
+			e.style.display = "none"; 
+		} else {
+			// d.style.display = "none";
+		}
+	}
+	function cProctFunction(elem) {
+		var a = document.getElementById("Mining");
+		var b = document.getElementById("Equipment");
+		var c = document.getElementById("Land");
+		var d = document.getElementById("Construction");
+		var e = document.getElementById("Cus");
+		var btn = document.getElementsByTagName("button")
+		for (i = 0; i < btn.length; i++) {
+			btn[i].classList.remove('active');
+		}
+		elem.classList.add('active');
+		if (e.style.display === "none") {
+			a.style.display = "none"; 
+			b.style.display = "none"; 
+			c.style.display = "none"; 
+			d.style.display = "none";  
+			e.style.display = "flex";  
+		} else {
+			// e.style.display = "none";
+		}
+	}
+</script>

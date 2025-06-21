@@ -1,27 +1,44 @@
 <?php 
 $title = "Shareholder | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to View Management.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else { 
 	$decoded = $shareholder->getData();  
 	
-	if (isset($_POST['shareholder_name']) && isset($_POST['nama_pemegangsaham']) && isset($_POST['NOS']) && isset($_POST['percent']) && isset($_POST['addFH'])){   
-		$shareholder_name = $_POST['shareholder_name']; 
-		$nama_pemegangsaham = $_POST['nama_pemegangsaham'];
-		$NOS = $_POST['NOS'];
-		$percent = $_POST['percent']; 
-
-		$add = $shareholder->addReport($shareholder_name, $nama_pemegangsaham, $NOS, $percent, $date);
-		if($add){ 
-			echo "<script type='text/javascript'>alert('Shareholder Added Success');</script>";
-		}else{
-			echo "<script type='text/javascript'>alert('Shareholder Added Failed. PDF exsist');</script>";
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shareholder_name']) && isset($_POST['nama_pemegangsaham']) && isset($_POST['NOS']) && isset($_POST['percent']) && isset($_POST['addFH'])){   
+		function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
 		}
+
+		$shareholder_name = clean_input($_POST['shareholder_name']);
+		$nama_pemegangsaham = clean_input($_POST['nama_pemegangsaham']); 
+		$NOS = (int) $_POST['NOS'];
+		$percent = (int) $_POST['percent']; 
+
+		$add = $shareholder->addReport($shareholder_name, $nama_pemegangsaham, $NOS, $percent, $date); 
+		if ($add) {
+			logActivity("UPDATE_SHAREHOLDER", "Shareholder ID $id updated successfully.");
+			echo "<script>alert('Shareholder Update Success');</script>";
+		} else {
+			logActivity("UPDATE_FAILED", "Failed to update Shareholder ID $id.");
+			echo "<script>alert('Shareholder Update Failed.');</script>";
+		}  
 		echo "<script type='text/javascript'>window.location='shareholder'</script>";
 	} 
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

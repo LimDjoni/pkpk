@@ -3,11 +3,16 @@
 /* Template default CSS
 /*----------------------------------------*/
 
-html,
-body { 
+html{ 
 	font-family: "Arial", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased; 
+	width: 100%;
+}
+
+body { 
+  	margin: 0 auto; 
+	max-width: 1920px;
 }
 
 h1,
@@ -608,6 +613,7 @@ HEADER-SECTION
 	z-index: 99;
 	display: flex;
 	justify-content: center; 
+	max-width: 1920px;
 } 
 
 /*---------------------
@@ -617,13 +623,11 @@ LOGO
 	float: left; 
     padding: 10px 0px 5px;
     max-width: 24%;
-    margin-left: 10%;
 }
 
 .logo a {
 	display: inline-block;
 } 
-
 /*---------------------
 NAV-MENU
 -----------------------*/
@@ -633,7 +637,6 @@ NAV-MENU
 
 .nav-menu {
 	float: right;
-	margin-right: 10%;
 }
 
 .nav-menu ul li { /*Menu Bar*/
@@ -1149,7 +1152,7 @@ INDEX.PHP
 }   
 
 .hs-item { 
-	height: 650px;  
+	height: 100%;  
 	overflow: hidden;  
 	background-size: cover; 
 }
@@ -1709,6 +1712,24 @@ BACK TO TOP BUTTON
 	color: #FF0000;
 }
 
+.logo-extension {
+	position: fixed; 
+	top: 5px;
+	margin-left: 400px;
+	z-index: 99999;
+	max-width: 1920px;
+}
+
+.logo-extension img {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 30px;
+	width: 90px;
+	height: 80px; 
+	color: #000000; 
+}
+
 /*---------------------
 FOOTER-SECTION
 -----------------------*/
@@ -1746,31 +1767,25 @@ FOOTER.PHP
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/ 
 @media only screen and (max-width: 1900px){
-	.nav-menu {
-	    margin-right: 5%;
-	}
-	.logo{
-		margin-left: 5%;   
-	    max-width: 32%;
-    	padding-top: 13px;
-	}
 	.hs-item {
 		height: 100%;
-	}
+	}  
 }
-@media only screen and (max-width: 1399px){
-	.nav-menu {
-	    margin-right: 5%;
-	}
-	.logo{
-		margin-left: 5%;   
-	    max-width: 32%;
-    	padding-top: 13px;
-	}
-	
+
+@media only screen and (max-width: 1700px){
+	.logo-extension {  
+		margin-left: 350px;
+	}  
+}
+
+@media only screen and (max-width: 1399px){ 
 	/*INDEX*/
 	.hs-item{
 		height: fit-content	;
+	}
+	.logo{
+	    max-width: 32%;
+    	padding-top: 13px;
 	}
 	.cta-section .text{
 		margin: 0 50px;
@@ -1849,8 +1864,18 @@ FOOTER.PHP
 		margin-left: 0.3%;   
 	    max-width: 32%;
     	padding-top: 16px;
-	}
+	} 
+	.logo-extension {  
+		margin-left: 350px;
+	}  
 }
+
+@media only screen and (max-width: 1200px){
+	.logo-extension {  
+		margin-left: 300px;
+	}  
+}
+
 
 /* Medium Device = 1200px */
 @media only screen and (max-width: 1100px) {
@@ -1995,6 +2020,14 @@ FOOTER.PHP
 	.sidebar{
 		display: none;
 	}
+	.logo-extension {  
+		position: absolute;
+		margin-left: 300px;
+	}  
+	.logo-extension img { 
+		width: 70px;
+		height: 60px;  
+	} 
 } 
 @media only screen and (max-width: 980px) {
 	/*INDEX*/
@@ -2068,6 +2101,10 @@ FOOTER.PHP
 	.logo {
 	    max-width: 53%;
 	}
+	
+	.logo-extension {  
+		margin-left: 350px;
+	}   
 }
 
 /* Tablet Device = 768px */
@@ -2164,6 +2201,10 @@ FOOTER.PHP
 	.logo {
 	    max-width: 68%;
 	}
+	
+	.logo-extension {  
+		margin-left: 340px;
+	}   
 }
 
 
@@ -2239,6 +2280,10 @@ FOOTER.PHP
 	}    
 	.pad20{
 		padding-top: 20px;
+	}
+	
+	.logo-extension {  
+		margin-left: 250px;
 	}
 }
 
@@ -2324,4 +2369,12 @@ FOOTER.PHP
 		width: 100% !important;
 		height: 100% !important; 
 	} 
+	
+	.logo-extension {  
+		margin-left: 220px;
+	}
+	.logo-extension img { 
+		width: 50px;
+		height: 40px;  
+	}
 } 

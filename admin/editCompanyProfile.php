@@ -1,26 +1,46 @@
 <?php 
 $title = "Edit Company Profile | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$id = $_GET['id'];
-	$decoded = $companyprofile->getDataByUid($id);   
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Company Profile.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id'];
+	$decoded = $companyprofile->getDataByUid($id);
 	
-	if (isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['editRep'])){   
-		$BodyEng = $_POST['desc']; 
-		$BodyInd = $_POST['desc2']; 
-
+	// Handle form submission
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['editRep'])) {
+		$BodyEng = trim($_POST['desc'] ?? '');
+		$BodyInd = trim($_POST['desc2'] ?? ''); 
+		
 		$update = $companyprofile->updateDataByUID($BodyEng, $BodyInd, $date, $id);
-		if($update){  
-			echo "<script type='text/javascript'>alert('Company Profile Update Success');</script>";
-		}else{
-			echo "<script type='text/javascript'>alert('Company Profile Update Failed. PDF exsist');</script>";
-		}	
+
+		if ($update) {
+			logActivity("UPDATE_PROFILE", "Company Profile ID $id updated successfully.");
+			echo "<script>alert('Company Profile Update Success');</script>";
+		} else {
+			logActivity("UPDATE_FAILED", "Failed to update Company Profile ID $id.");
+			echo "<script>alert('Company Profile Update Failed.');</script>";
+		} 
 		echo "<script type='text/javascript'>window.location='company-profile'</script>";
 	} 
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

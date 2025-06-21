@@ -32,10 +32,12 @@ $discTahun = $disclosure->getDataTahun();
 						<div class="container">
 							<div class="d-flex align-items-center">  
 								<p class="hidden">Year:</p>
-								<select id="myInput5" class="col-sm-4 form-control form-control-sm">
+								<select id="myInput5" class="col-sm-4 form-control form-control-sm"> 
 									<option value="" selected>All</option>
 									<?php foreach($discTahun as $dt) { ?>
-										<option value="<?php echo $dt['Tahun']; ?>"><?php echo $dt['Tahun']; ?></option> 
+										<option value="<?php echo htmlspecialchars($dt['Tahun']); ?>">
+											<?php echo htmlspecialchars($dt['Tahun']); ?>
+										</option>
 									<?php  } ?>
 								</select>
 								<br>
@@ -67,3 +69,78 @@ $discTahun = $disclosure->getDataTahun();
 </body>
 
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPageDisclosure = parseInt($('#totalPagesDisclosure').val());   
+
+        var pag = $('#paginationDisclosure').simplePaginator({
+            totalPages: totalPageDisclosure,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#contentDisclosure").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_disclosure.php",
+                    method:"POST",
+                    dataType: "json",       
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#contentDisclosure').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script> 
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput5").on("change",function(){
+	    	var year = $(this).val(); 
+	        $.ajax({
+		        url :"total_data_disclosure.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPagesDisclosure').val(obj.totalData);   
+
+			    	var totalPageDisclosure = parseInt($('#totalPagesDisclosure').val());   
+			      
+			        $('#paginationDisclosure').simplePaginator({
+			            totalPages: totalPageDisclosure,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#contentDisclosure").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_disclosure.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#contentDisclosure').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>   

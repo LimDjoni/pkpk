@@ -1,31 +1,23 @@
 <?php 
 $title = "Vission Mission | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$decoded = $vissionmission->getData();  
-	
-	// if (isset($_POST['vission']) && isset($_POST['visi']) && isset($_POST['mission']) && isset($_POST['misi']) && isset($_POST['motto']) && isset($_POST['moto']) && isset($_POST['phylosophy']) && isset($_POST['filosofi']) && isset($_POST['addFH'])){   
-	// 	$Vission = $_POST['vission']; 
-	// 	$Visi = $_POST['visi'];
-	// 	$Mission = $_POST['mission'];
-	// 	$Misi = $_POST['misi'];
-	// 	$Motto = $_POST['motto'];
-	// 	$Moto = $_POST['moto'];
-	// 	$Phylosophy = $_POST['phylosophy'];
-	// 	$Filosofi = $_POST['filosofi']; 
-
-	// 	$add = $vissionmission->addReport($Vission, $Visi, $Mission, $Misi, $Motto, $Moto, $Phylosophy, $Filosofi, $date);
-	// 	if($add){ 
-	// 		echo "<script type='text/javascript'>alert('Vission Mission Added Success');</script>";
-	// 	}else{
-	// 		echo "<script type='text/javascript'>alert('Vission Mission Added Failed. PDF exsist');</script>";
-	// 	}
-	// 	echo "<script type='text/javascript'>window.location='vission-mission'</script>";
-	// } 
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
 }
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to View Vission Mission.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else {
+	$decoded = $vissionmission->getData();   
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">
@@ -57,78 +49,6 @@ if($_SESSION['login'] == true) {
 					</div>
 				</div><!-- /.container-fluid -->
 			</section>
-
-			<!-- Main content -->
-			<!-- <section class="content">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-8">
-							<div class="card card-primary">
-								<div class="card-header">
-									<h3 class="card-title">Create New Data</h3>
-								</div>
-								<form action="" method="POST" enctype="multipart/form-data">
-									<div class="row">
-										<div class="card-body col-md-6">
-											<label for="exampleInputEmail1">English</label>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Vission</label>
-												<textarea id="Remark" name="vission" class="form-control" rows="4" cols="50" placeholder="Enter Vission in English"></textarea> 
-											</div>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Mission</label>
-												<textarea id="Remark" name="mission" class="form-control" rows="4" cols="50" placeholder="Enter Mission in English"></textarea> 
-											</div>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Motto</label>
-												<textarea id="Remark" name="motto" class="form-control" rows="4" cols="50" placeholder="Enter Motto in English"></textarea> 
-											</div>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Phylosophy</label>
-												<textarea id="Remark" name="phylosophy" class="form-control" rows="4" cols="50" placeholder="Enter Phylosophy in English"></textarea> 
-											</div> 
-										</div> 
-										<div class="card-body col-md-6"> 
-											<label for="exampleInputEmail1">Indonesia</label> 
-											<div class="form-group">
-												<label for="exampleInputEmail1">Visi</label>
-												<textarea id="Remark" name="visi" class="form-control" rows="4" cols="50" placeholder="Enter Visi in Indonesia"></textarea> 
-											</div>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Misi</label>
-												<textarea id="Remark" name="misi" class="form-control" rows="4" cols="50" placeholder="Enter Misi in Indonesia"></textarea> 
-											</div>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Moto</label>
-												<textarea id="Remark" name="moto" class="form-control" rows="4" cols="50" placeholder="Enter Moto in Indonesia"></textarea> 
-											</div>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Filosofi</label>
-												<textarea id="Remark" name="filosofi" class="form-control" rows="4" cols="50" placeholder="Enter Filosofi in Indonesia"></textarea> 
-											</div>
-										</div>
-									</div>
-									<div class="card-footer">
-										<button type="submit" name="addFH" class="btn btn-primary">Submit</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section> -->
-			<!-- /.content -->
-
-			<!-- Content Header (Page header) -->
-			<!-- <section class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1>Data Vission Mission</h1>
-						</div>
-					</div>
-				</div>
-			</section> -->
 
 			<!-- Main content -->
 			<section class="content">

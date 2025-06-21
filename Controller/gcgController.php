@@ -1,4 +1,6 @@
 <?php
+include_once 'config.php';
+
 class gcgController{
 	protected $conn;
  
@@ -6,101 +8,129 @@ class gcgController{
 	// 	$this->conn = mysqli_connect("192.168.100.88", "deli", "Deli123", "website", "3306"); //(host, username, password, database, port)
 	// }
 
+	// public function __construct(){
+	// 	$this->conn = mysqli_connect("localhost", "pkpktbk1_pkpk", "Pkpk_1234!", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
+	// }
+
 	public function __construct(){
-		$this->conn = mysqli_connect("localhost", "pkpktbk1_pkpk", "Pkpk_1234!", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
+		$this->conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+
+		if (!$this->conn) {
+			die("Database connection failed: " . mysqli_connect_error());
+		}
+
+		// Set charset to UTF-8 for safety
+		mysqli_set_charset($this->conn, "utf8mb4");
 	}
 	
-	public function getData(){
-		$query = mysqli_query($this->conn,"SELECT * FROM gcg JOIN gcg2 ON gcg.ID_GCG = gcg2.ID_GCG WHERE gcg.delete_date IS NULL ORDER BY gcg.created_date DESC");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
+	public function getData() {
+		$data = [];
+
+		$sql = "
+			SELECT * 
+			FROM gcg 
+			JOIN gcg2 ON gcg.ID_GCG = gcg2.ID_GCG 
+			WHERE gcg.delete_date IS NULL 
+			ORDER BY gcg.created_date DESC
+		";
+
+		$result = mysqli_query($this->conn, $sql);
+
+		if (!$result) {
+			error_log("Query error in getData(): " . mysqli_error($this->conn));
+			return $data;
+		}
+
+		while ($row = mysqli_fetch_assoc($result)) {
+			$data[] = $row;
+		}
+
+		return $data;
+	}
+
+
+	public function getDataByUid($uID) {
+		$data = [];
+
+		$stmt = $this->conn->prepare("
+			SELECT * 
+			FROM gcg 
+			JOIN gcg2 ON gcg.ID_GCG = gcg2.ID_GCG 
+			WHERE gcg.ID_GCG = ?
+		");
+
+		if (!$stmt) {
+			error_log("Prepare failed in getDataByUid(): " . $this->conn->error);
+			return $data;
+		}
+
+		$stmt->bind_param("i", $uID);
+		$stmt->execute();
+
+		$result = $stmt->get_result();
+		if ($result && $result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$data[] = $row;
 			}
 		}
+
+		$stmt->close();
 		return $data;
 	} 
 
-	public function getDataByUid($uID){
-		$query = mysqli_query($this->conn,"SELECT * FROM gcg JOIN gcg2 ON gcg.ID_GCG = gcg2.ID_GCG WHERE gcg.ID_GCG='$uID'");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
-		}
-		return $data;
-	}
-	
-	public function addReport($OverviewEng, $OverviewInd, $RaNEng, $RaNInd, $IAEng, $IAInd, $ICEng, $ICInd, $RMEng, $RMInd, $COCEng, $COCInd, $WhistleEng, $WhistleInd, $IaDEng, $IaDInd, $createddate){ 
-		$OverviewEng = mysqli_real_escape_string($this->conn,$OverviewEng); 
-		$OverviewInd = mysqli_real_escape_string($this->conn,$OverviewInd); 
-		$RaNEng = mysqli_real_escape_string($this->conn,$RaNEng); 
-		$RaNInd = mysqli_real_escape_string($this->conn,$RaNInd); 
-		$IAEng = mysqli_real_escape_string($this->conn,$IAEng); 
-		$IAInd = mysqli_real_escape_string($this->conn,$IAInd); 
-		$ICEng = mysqli_real_escape_string($this->conn,$ICEng); 
-		$ICInd = mysqli_real_escape_string($this->conn,$ICInd); 
-		$RMEng = mysqli_real_escape_string($this->conn,$RMEng); 
-		$RMInd = mysqli_real_escape_string($this->conn,$RMInd); 
-		$COCEng = mysqli_real_escape_string($this->conn,$COCEng); 
-		$COCInd = mysqli_real_escape_string($this->conn,$COCInd); 
-		$WhistleEng = mysqli_real_escape_string($this->conn,$WhistleEng); 
-		$WhistleInd = mysqli_real_escape_string($this->conn,$WhistleInd); 
-		$IaDEng = mysqli_real_escape_string($this->conn,$IaDEng); 
-		$IaDInd = mysqli_real_escape_string($this->conn,$IaDInd); 
-		$query="INSERT INTO gcg(OverviewEng, OverviewInd, RaNEng, RaNInd, IAEng, IAInd, ICEng, ICInd, RMEng, RMInd, created_date)ALUES ('$OverviewEng', '$OverviewInd', '$RaNEng', '$RaNInd', '$IAEng', '$IAInd', '$ICEng', '$ICInd', '$RMEng', '$RMInd', '$createddate')";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-  		$last_id = mysqli_insert_id($this->conn);
-		$query2="INSERT INTO gcg(ID_GCG, COCEng, COCInd, WhistleEng, WhistleInd, IaDEng, IaDInd, created_date) VALUES ('$last_id', '$COCEng', '$COCInd', '$WhistleEng', '$WhistleInd', '$IaDEng', '$IaDInd', '$createddate')";
-		$result2 = mysqli_query($this->conn,$query2) or die(mysqli_connect_errno()."Data2 cannot inserted");
-		return $result.$result2; 
-	} 
+	public function updateDataByUID(
+		$OverviewEng, $OverviewInd, $RaNEng, $RaNInd, $IAEng, $IAInd,
+		$ICEng, $ICInd, $RMEng, $RMInd, $COCEng, $COCInd, $WhistleEng, $WhistleInd,
+		$IaDEng, $IaDInd, $updatedate, $uID
+	) {
+		// Begin transaction
+		$this->conn->begin_transaction();
 
-	public function updateDataByUID($OverviewEng, $OverviewInd, $RaNEng, $RaNInd, $IAEng, $IAInd, $ICEng, $ICInd, $RMEng, $RMInd, $COCEng, $COCInd, $WhistleEng, $WhistleInd, $IaDEng, $IaDInd, $updatedate, $uID){ 
-		$OverviewEng = mysqli_real_escape_string($this->conn,$OverviewEng); 
-		$OverviewInd = mysqli_real_escape_string($this->conn,$OverviewInd); 
-		$RaNEng = mysqli_real_escape_string($this->conn,$RaNEng); 
-		$RaNInd = mysqli_real_escape_string($this->conn,$RaNInd); 
-		$IAEng = mysqli_real_escape_string($this->conn,$IAEng); 
-		$IAInd = mysqli_real_escape_string($this->conn,$IAInd); 
-		$ICEng = mysqli_real_escape_string($this->conn,$ICEng); 
-		$ICInd = mysqli_real_escape_string($this->conn,$ICInd); 
-		$RMEng = mysqli_real_escape_string($this->conn,$RMEng); 
-		$RMInd = mysqli_real_escape_string($this->conn,$RMInd); 
-		$COCEng = mysqli_real_escape_string($this->conn,$COCEng); 
-		$COCInd = mysqli_real_escape_string($this->conn,$COCInd); 
-		$WhistleEng = mysqli_real_escape_string($this->conn,$WhistleEng); 
-		$WhistleInd = mysqli_real_escape_string($this->conn,$WhistleInd); 
-		$IaDEng = mysqli_real_escape_string($this->conn,$IaDEng); 
-		$IaDInd = mysqli_real_escape_string($this->conn,$IaDInd); 
-		$query = "UPDATE gcg SET OverviewEng = '$OverviewEng', OverviewInd = '$OverviewInd', RaNEng = '$RaNEng', RaNInd = '$RaNInd', IAEng = '$IAEng', IAInd = '$IAInd', ICEng = '$ICEng', ICInd = '$ICInd', RMEng = '$RMEng', RMInd = '$RMInd', update_date = '$updatedate' WHERE ID_GCG = '$uID'";
-		$query2 = "UPDATE gcg2 SET COCEng = '$COCEng', COCInd = '$COCInd', WhistleEng = '$WhistleEng', WhistleInd = '$WhistleInd', IaDEng = '$IaDEng', IaDInd = '$IaDInd', update_date = '$updatedate' WHERE ID_GCG = '$uID'";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_error()."Data cannot inserted");
-		$result2 = mysqli_query($this->conn,$query2) or die(mysqli_error()."Data2 cannot inserted");
-		return $result.$result2; 
-	} 
+		try {
+			// Update gcg
+			$stmt1 = $this->conn->prepare("
+				UPDATE gcg 
+				SET OverviewEng=?, OverviewInd=?, RaNEng=?, RaNInd=?, 
+					IAEng=?, IAInd=?, ICEng=?, ICInd=?, 
+					RMEng=?, RMInd=?, update_date=? 
+				WHERE ID_GCG=?
+			");
+			$stmt1->bind_param(
+				"sssssssssssi", 
+				$OverviewEng, $OverviewInd, $RaNEng, $RaNInd,
+				$IAEng, $IAInd, $ICEng, $ICInd,
+				$RMEng, $RMInd, $updatedate, $uID
+			);
+			$stmt1->execute();
+			$stmt1->close();
 
-	public function deleteReport($deletedate, $IDReport){
-		$query = "SELECT * FROM gcg WHERE ID_GCG='$IDReport'";
-            //checking if the data is available in db
-		$result = mysqli_query($this->conn,$query);
-		$count_row = $result->num_rows;
-		if ($count_row == 1){
-			$query = "UPDATE gcg SET delete_date = '$deletedate' WHERE ID_GCG='$IDReport'";
-			$query2 = "UPDATE gcg2 SET delete_date = '$deletedate' WHERE ID_GCG='$IDReport'";
-			$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-			$result2 = mysqli_query($this->conn,$query2) or die(mysqli_error()."Data2 cannot inserted");
-			return $result.$result2; 
-		}
-		else { 
+			// Update gcg2
+			$stmt2 = $this->conn->prepare("
+				UPDATE gcg2 
+				SET COCEng=?, COCInd=?, WhistleEng=?, WhistleInd=?, 
+					IaDEng=?, IaDInd=?, update_date=? 
+				WHERE ID_GCG=?
+			");
+			$stmt2->bind_param(
+				"sssssssi", 
+				$COCEng, $COCInd, $WhistleEng, $WhistleInd, 
+				$IaDEng, $IaDInd, $updatedate, $uID
+			);
+			$stmt2->execute();
+			$stmt2->close();
+
+			// Commit if both succeed
+			$this->conn->commit();
+			return true;
+
+		} catch (Exception $e) {
+			// Rollback on any failure
+			$this->conn->rollback();
+			error_log("Update failed: " . $e->getMessage());
 			return false;
 		}
 	}
+
 }
 ?>
 

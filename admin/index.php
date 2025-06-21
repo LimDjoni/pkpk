@@ -1,22 +1,34 @@
-<?php 
+<?php
 $title = "ADMIN PORTAL | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';  
+include_once 'include/logActivity.php'; // Add logging
 
+// If already logged in
+if (!empty($_SESSION['login'])) {
+	header("Location: dashboard");
+	exit;
+}
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	$username = htmlspecialchars(trim($_POST['username']));
+	$password = $_POST['password'];
 
-if($_SESSION['login'] != true) {
-	if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['submit'])) { 
-	$Name = $_POST['username']; 
-	$Password = $_POST['password']; 
-	$logged = $user->check_login($Name, $Password);
-	if($logged == 1){ 
-	  	echo "<script> window.location.href = 'dashboard';</script>"; 
-	}else{ 
-	  	echo "<script> window.location.href = 'index';</script>"; 
+	$logged = $user->check_login($username, $password);
+	if ($logged == 1) {
+		session_regenerate_id(true);
+		$_SESSION['login'] = true; 
+		$_SESSION['username'] = $username;
+		logActivity("LOGIN_SUCCESS", "User '$username' logged in successfully.");
+
+		// CSRF token generation
+		$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+		echo "<script type='text/javascript'>window.location='dashboard'</script>";
+	} else {
+		logActivity("LOGIN_FAIL", "Failed login attempt with username '$username'.");
+		$error = "Login failed.";
+		echo "<script type='text/javascript'>window.location='index'</script>";
 	}
-}  
-}else{
-	echo "<script> window.location.href = 'dashboard';</script>"; 
 }
 ?>
 
@@ -34,7 +46,7 @@ if($_SESSION['login'] != true) {
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
 									</div>
-					 				<form action="" method="post" class="user">
+					 				<form action="" method="post"  class="user">
 										<div class="form-group">
 											<input type="username" class="form-control form-control-user" name="username" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Username...">
 										</div>

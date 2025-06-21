@@ -1,32 +1,50 @@
 <?php 
 $title = "Edit Our Businesses | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Our Business.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id']; 
 	$decoded = $ourBusinesses->getDataByUid($id);   
 	
-	if (isset($_POST['Mining']) && isset($_POST['Tambang']) && isset($_POST['Equipment']) && isset($_POST['Perlengkapan']) && isset($_POST['Land']) && isset($_POST['Lahan']) && isset($_POST['Construction']) && isset($_POST['Konstruksi']) && isset($_POST['addFH'])){   
-		$Mining = $_POST['Mining']; 
-		$Tambang = $_POST['Tambang'];
-		$Equipment = $_POST['Equipment'];
-		$Perlengkapan = $_POST['Perlengkapan'];
-		$Land = $_POST['Land'];
-		$Lahan = $_POST['Lahan'];
-		$Construction = $_POST['Construction'];
-		$Konstruksi = $_POST['Konstruksi']; 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Mining']) && isset($_POST['Tambang']) && isset($_POST['Equipment']) && isset($_POST['Perlengkapan']) && isset($_POST['Land']) && isset($_POST['Lahan']) && isset($_POST['Construction']) && isset($_POST['Konstruksi']) && isset($_POST['addFH'])){   
+		$Mining = trim($_POST['Mining'] ?? '');  
+		$Tambang = trim($_POST['Tambang'] ?? ''); 
+		$Equipment = trim($_POST['Equipment'] ?? ''); 
+		$Perlengkapan = trim($_POST['Perlengkapan'] ?? ''); 
+		$Land = trim($_POST['Land'] ?? ''); 
+		$Lahan = trim($_POST['Lahan'] ?? ''); 
+		$Construction = trim($_POST['Construction'] ?? ''); 
+		$Konstruksi = trim($_POST['Konstruksi'] ?? '');  
 		
 		$update = $ourBusinesses->updateDataByUID($Mining, $Tambang, $Equipment, $Perlengkapan, $Land, $Lahan, $Construction, $Konstruksi, $date, $id);
-		if($update){  
-			echo "<script type='text/javascript'>alert('Our Businesses Update Success');</script>";
-		}else{
-			echo "<script type='text/javascript'>alert('Our Businesses Update Failed. PDF exsist');</script>";
-		}	
+		if ($update) {
+			logActivity("UPDATE_OUR_BUSINESS", "Our Business ID $id updated successfully.");
+			echo "<script>alert('Our Business Update Success');</script>";
+		} else {
+			logActivity("UPDATE_FAILED", "Failed to update Our Business ID $id.");
+			echo "<script>alert('Our Business Update Failed.');</script>";
+		}  
 		echo "<script type='text/javascript'>window.location='our-businesses'</script>";
 	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

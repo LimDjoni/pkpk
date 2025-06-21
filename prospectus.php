@@ -1,3 +1,23 @@
+<?php
+$prospectuses = [
+    [
+        "year" => "2023",
+        "title" => "2023 Limited Public Offering Concise Prospectus",
+        "file" => "Prospektus Ringkas PKPK - CETAK.pdf"
+    ],
+    [
+        "year" => "2007",
+        "title" => "2007 Public Offering Prospectus",
+        "file" => "Prospektus_Penawaran_Umum_2007.pdf"
+    ],
+    [
+        "year" => "2023",
+        "title" => "2023 Limited Public Offering Prospectus",
+        "file" => "Prospektus PKPK - CETAK.pdf"
+    ]
+];
+?>
+
 <!-- Header -->
 <?php $title = "Prospectus | PKPK";
 $page = "prospektus"; 
@@ -24,36 +44,24 @@ include 'include/header.php' ?>
 			<div class="row">
 				<div class="about-text">
 					<div class="section-title">
-						<div class="container">
-							<div class="d-flex align-items-center">  
-								<p class="hidden">Year:</p>
-								<select onchange="searchFunction1()" id="myInput1" class="col-sm-4 form-control form-control-sm">
-									<option value="" selected>All</option>
-									<option value="2007">2007</option> 
-									<option value="2023">2023</option> 
-								</select>
-								<br>
-							</div>
+						<div class="container"> 
 							<table id="myTable1" class="table">
 								<tbody>
+									<?php foreach($prospectuses as $p): ?>
 									<tr>
-										<td style="text-align: center;"><img class="mx-auto hidden" style="width:100px;" src="img/file.png"></td> 
-										<td><b>2007</b><br /><a>2007 Public Offering Prospectus</a><br /></td>
-										<td style="text-align: center;"><a class="download" href="admin/assets/pdf/prospectus/Prospektus_Penawaran_Umum_2007.pdf" target="_blank">Download</a></td>
-										<td hidden>2007</td>
-									</tr>  
-									<tr>
-										<td style="text-align: center;"><img class="mx-auto hidden" style="width:100px;" src="img/file.png"></td> 
-										<td><b>2023</b><br /><a>2023 Limited Public Offering Prospectus</a><br/></td>
-										<td style="text-align: center;"><a class="download" href="admin/assets/pdf/prospectus/Prospektus PKPK - CETAK.pdf" target="_blank">Download</a></td>
-										<td hidden>2023</td>
-									</tr>  
-									<tr>
-										<td style="text-align: center;"><img class="mx-auto hidden" style="width:100px;" src="img/file.png"></td> 
-										<td><b>2023</b><br /><a>2023 Limited Public Offering Concise Prospectus</a><br/></td>
-										<td style="text-align: center;"><a class="download" href="admin/assets/pdf/prospectus/Prospektus Ringkas PKPK - CETAK.pdf" target="_blank">Download</a></td>
-										<td hidden>2023</td>
-									</tr>  
+										<td style="text-align: center;">
+											<img class="mx-auto hidden" style="width:100px;" src="img/file.png">
+										</td> 
+										<td>
+											<b><?= $p['year'] ?></b><br />
+											<a><?= $p['title'] ?></a><br />
+										</td>
+										<td style="text-align: center;">
+											<a class="download" href="admin/assets/pdf/prospectus/<?= $p['file'] ?>" target="_blank">Download</a>
+										</td>
+										<td hidden><?= $p['year'] ?></td>
+									</tr>
+									<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div> 
@@ -61,28 +69,7 @@ include 'include/header.php' ?>
 				</div>
 			</div>
 		</div>
-	</section>
-
-	<!-- Testimoial Section Begin -->
-	<!-- <section class="testimonial-section">
-		<div class="container">
-			<div class="row">
-				<div class="about-text">
-					<div class="section-title"> 
-                        <p>Our history of being involved in the coal industry can be traced back to around 2005 in South Kalimantan, Indonesia. Over the years, our business has evolved and today, we have established a reputation as a reliable coal trader and coal shipping company in Indonesia.
-
-						We procure thermal coal from coal mines located in South Kalimantan for domestic sales to mainly coal traders. We also provide chartering services of tugboats, barges and bulk carrier to transport coal within the Indonesian territories.
-
-						Led by an experienced management team, and with the depth and diversity of their technical and operational expertise, we are positioned to tap opportunities in Indonesia – one of the leading producers of coal globally.
-
-						With increases in Indonesia’s electrification and new coal-fired power plants across the Indonesian archipelago, demand for coal and inter-island transportation of coal is expected to remain robust, driving our growth.
-                        </p>
-                    </div>
-				</div>
-			</div>
-		</div>
-	</section> -->
-	<!-- Testimonial Section End -->
+	</section> 
 
 	<!-- Footer -->
 	<?php include 'include/footer.php' ?>

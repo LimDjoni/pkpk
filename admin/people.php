@@ -1,46 +1,70 @@
 <?php 
 $title = "People | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to View Management.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else {
 	$decoded = $people->getData();    
 
-	if ( isset($_FILES['file2']) && isset($_POST['Status']) && isset($_POST['Name']) && isset($_POST['Position']) && isset($_POST['Jabatan']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
-		$Status = $_POST['Status'];
-		$Name = $_POST['Name'];
-		$Position = $_POST['Position'];
-		$Jabatan = $_POST['Jabatan']; 
-		$Des = $_POST['desc']; 
-		$Deskripsi = $_POST['desc2']; 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file2']) && isset($_POST['Status']) && isset($_POST['Name']) && isset($_POST['Position']) && isset($_POST['Jabatan']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
+		function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
 
-		$ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
-		$nama2 = $_FILES['file2']['name'];
-		$y = explode('.', $nama2);
-		$ekstensi2 = strtolower(end($y));
-		$ukuran2 = $_FILES['file2']['size'];
-		$file_tmp2 = $_FILES['file2']['tmp_name'];
+		$Status = clean_input($_POST['Status']);
+		$Name = clean_input($_POST['Name']);
+		$Position = clean_input($_POST['Position']);
+		$Jabatan = clean_input($_POST['Jabatan']);
+		$Des = urlencode(clean_input($_POST['desc']));
+		$Deskripsi = urlencode(clean_input($_POST['desc2'])); 
 
-		if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-			if($ukuran2 < 150*MB){    
-				$add = $people->addReport($Name, $Jabatan, $Position, $Deskripsi, $Des, $nama2, $Status, $date);
-				if($add){  
-					move_uploaded_file($file_tmp2, 'assets/img/people/'.$nama2); 
-					chmod('assets/img/people/'.$nama2, 0777);
+		$allowedExts = ['png', 'jpg', 'jpeg'];
+		$allowedMime = array('image/png', 'image/jpeg');
+		$nama2       = $_FILES['file2']['name'];
+		$ext         = strtolower(pathinfo($nama2, PATHINFO_EXTENSION));
+		$mime        = mime_content_type($_FILES['file2']['tmp_name']);
+		$ukuran2     = $_FILES['file2']['size'];
+		$file_tmp2   = $_FILES['file2']['tmp_name']; 
+
+		if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {
+			if ($ukuran2 < 150 * 1024 * 1024) {
+				$newFilename = uniqid('People_', true) . '.' . $ext;
+				
+				$add = $people->addReport($Name, $Jabatan, $Position, $Deskripsi, $Des, $newFilename, $Status, $date);
+				if ($add) {
+					move_uploaded_file($file_tmp2, "assets/img/people/$newFilename"); 
+					chmod("assets/img/people/$newFilename", 0644); 
+					logActivity("PEOPLE_ADD_SUCCESS", "People added: $newFilename by {$_SESSION['username']}");
 					echo "<script type='text/javascript'>alert('People Added Success');</script>";
 				}else{
+					logActivity("PEOPLE_ADD_FAILED", "Duplicate or DB error on add.");
 					echo "<script type='text/javascript'>alert('People Added Failed. PDF exsist');</script>";
 				}
 			}else{
+				logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for People ID $id.");
 				echo "<script type='text/javascript'>alert('File Too Big');</script>";
 			}
 		}else{
+			if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+				logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for People ID $id.");
+			}
 			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
 		}
 		echo "<script type='text/javascript'>window.location='people'</script>";
 	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">
@@ -91,7 +115,7 @@ if($_SESSION['login'] == true) {
 											</div> 
 											<div class="form-group">
 												<label for="exampleInputEmail1">Image</label>
-												<input type="file" id="file2" name="file2">
+												<input type="file" id="file2" name="file2" required>
 											</div>
 											<div class="form-group">
 												<label for="exampleInputEmail1">Status</label>

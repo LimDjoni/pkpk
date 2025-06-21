@@ -5,6 +5,7 @@ include 'include/header.php';
 include_once (PROJECT_ROOT_PATH . '/../Controller/gcgController.php');
 $gcg = new gcgController();
 $gcgDt = $gcg->getData();
+$data = $gcgDt[0]; 
 ?>
 <!-- Header -->
 
@@ -26,34 +27,33 @@ $gcgDt = $gcg->getData();
 	<section class="testimonial-section">
 		<div class="container">
 			<div class="row justify-content-center">  
-				<button class="button active" onClick="overviewFunction(this)"><a>Overview</a></button> 
-				<button class="button" onClick="remunerationFunction(this)"><a>Remuneration and Nominating Committee</a></button> 
-				<button class="button" onClick="nominatingFunction(this)"><a>Internal Audit Unit</a></button>  
-				<button class="button" onClick="IControlFunction(this)"><a>Internal Control System</a></button>   
-				<button class="button" onClick="RismanFunction(this)"><a>Risk Management System</a></button>  
-				<button class="button" onClick="CoCFunction(this)"><a>Code Of Conduct</a></button>  
-				<button class="button" onClick="WhistleFunction(this)"><a>Whistleblowing System</a></button>  
-				<button class="button" onClick="InfFunction(this)"><a>Information and Data Access</a></button>   
+				<button class="button active" onClick="overviewFunction(this)">Overview</button> 
+				<button class="button" onClick="remunerationFunction(this)">Remuneration and Nominating Committee</button> 
+				<button class="button" onClick="nominatingFunction(this)">Internal Audit Unit</button>  
+				<button class="button" onClick="IControlFunction(this)">Internal Control System</button>   
+				<button class="button" onClick="RismanFunction(this)">Risk Management System</button>  
+				<button class="button" onClick="CoCFunction(this)">Code Of Conduct</button>  
+				<button class="button" onClick="WhistleFunction(this)">Whistleblowing System</button>  
+				<button class="button" onClick="InfFunction(this)">Information and Data Access</button>   
 			</div>
 		</div>
 	</section>
 
-	<!-- Testimoial Section Begin -->
-	<?php for($j=0; $j< count($gcgDt); $j++){ ?>
+	<!-- Testimoial Section Begin --> 
 	<section class="testimonial-section">
 		<div class="container"> 
 			<div class="row">
 				<div class="about-text">
 					<div class="section-title"id="Overview"> 
-						<p><?php echo $gcgDt[$j]['OverviewEng']; ?></p>
+						<p><?php echo $data['OverviewEng']; ?></p>
 					</div>   
 					<div class="section-title"id="Remuneration" style="display: none;">
-						<p><?php echo $gcgDt[$j]['RaNEng']; ?></p>
+						<p><?php echo $data['RaNEng']; ?></p>
 					</div> 
 					<div class="section-title"id="Nominating" style="display: none;">
 						<div class="fs-about"> 
 							<div class="fa-logo1"> 
-								<p><?php echo $gcgDt[$j]['IAEng']; ?></p>
+								<p><?php echo $data['IAEng']; ?></p>
 								<div class="content row">  
 									<div class="col-sm-3">
 										<img class="img-rounded" src="admin/assets/img/people/bagoes.png" alt="" >
@@ -79,25 +79,24 @@ $gcgDt = $gcg->getData();
 						</div>
 					</div> 
 					<div class="section-title"id="Icontrol" style="display: none;">
-						<p><?php echo $gcgDt[$j]['ICEng']; ?></p> 
+						<p><?php echo $data['ICEng']; ?></p> 
 					</div>   
 					<div class="section-title"id="RisMan" style="display: none;">
-						<p><?php echo $gcgDt[$j]['RMEng']; ?></p>
+						<p><?php echo $data['RMEng']; ?></p>
 					</div> 
 					<div class="section-title"id="Coc" style="display: none;">
-						<p><?php echo $gcgDt[$j]['COCEng']; ?></p>
+						<p><?php echo $data['COCEng']; ?></p>
 					</div> 
 					<div class="section-title"id="Whistleblowing" style="display: none;">
-						<p><?php echo $gcgDt[$j]['WhistleEng']; ?></p>
+						<p><?php echo $data['WhistleEng']; ?></p>
 					</div> 
 					<div class="section-title"id="Information" style="display: none;">
-						<p><?php echo $gcgDt[$j]['IaDEng']; ?></p>
+						<p><?php echo $data['IaDEng']; ?></p>
 					</div> 
 				</div>  
 			</div>
 		</div>
 	</section>
-<?php } ?>
 	<!-- </div> -->
 	<!-- Testimonial Section End -->
 
@@ -106,3 +105,62 @@ $gcgDt = $gcg->getData();
 	<!-- Footer -->
 </body>
 </html>
+
+<script>
+function hideAllSections() {
+  const ids = ["Overview", "Remuneration", "Nominating", "Icontrol", "RisMan", "Coc", "Whistleblowing", "Information"];
+  ids.forEach(id => document.getElementById(id).style.display = "none");
+  document.querySelectorAll('.button').forEach(btn => btn.classList.remove('active'));
+}
+
+function overviewFunction(el) {
+  hideAllSections();
+  document.getElementById("Overview").style.display = "block";
+  el.classList.add('active');
+}
+function remunerationFunction(el) {
+  hideAllSections();
+  document.getElementById("Remuneration").style.display = "block";
+  el.classList.add('active');
+}
+function nominatingFunction(el) {
+  hideAllSections();
+  document.getElementById("Nominating").style.display = "block";
+  el.classList.add('active');
+}
+function IControlFunction(el) {
+  hideAllSections();
+  document.getElementById("Icontrol").style.display = "block";
+  el.classList.add('active');
+}
+function RismanFunction(el) {
+  hideAllSections();
+  document.getElementById("RisMan").style.display = "block";
+  el.classList.add('active');
+}
+function CoCFunction(el) {
+  hideAllSections();
+  document.getElementById("Coc").style.display = "block";
+  el.classList.add('active');
+}
+function WhistleFunction(el) {
+  hideAllSections();
+  document.getElementById("Whistleblowing").style.display = "block";
+  el.classList.add('active');
+}
+function InfFunction(el) {
+  hideAllSections();
+  document.getElementById("Information").style.display = "block";
+  el.classList.add('active');	
+}
+function internalAuditFunc() {
+  const x = document.getElementById("myDIVIAudit");
+  x.style.display = (x.style.display === "none") ? "block" : "none";
+}
+</script>
+
+<script>
+window.onload = function () {
+  overviewFunction(document.querySelector('.button.active'));
+};
+</script>

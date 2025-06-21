@@ -1,56 +1,88 @@
 <?php 
 $title = "Edit People | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-    $id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Management.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id']; 
     $decoded = $people->getDataByUid($id);  
 
-    if ( isset($_FILES['file2']) && isset($_POST['Status']) && isset($_POST['Name']) && isset($_POST['Position']) && isset($_POST['Jabatan']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['editRep'])){ 
-        $Status = $_POST['Status'];
-        $Name = $_POST['Name'];
-        $Position = $_POST['Position'];
-        $Jabatan = $_POST['Jabatan']; 
-        $Des = $_POST['desc']; 
-        $Deskripsi = $_POST['desc2']; 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file2']) && isset($_POST['Status']) && isset($_POST['Name']) && isset($_POST['Position']) && isset($_POST['Jabatan']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['editRep'])){ 
+        function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
 
-        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){
-        $ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
-        $nama2 = $_FILES['file2']['name'];
-        $y = explode('.', $nama2);
-        $ekstensi2 = strtolower(end($y));
-        $ukuran2 = $_FILES['file2']['size'];
-        $file_tmp2 = $_FILES['file2']['tmp_name'];
+		$Status = clean_input($_POST['Status']);
+		$Name = clean_input($_POST['Name']);
+		$Position = clean_input($_POST['Position']);
+		$Jabatan = clean_input($_POST['Jabatan']);
+		$Des = urlencode(clean_input($_POST['desc']));
+		$Deskripsi = urlencode(clean_input($_POST['desc2']));  
 
-        if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-            if($ukuran2 < 150*MB){    
-                    $update = $people->updateDataByUID($Name, $Jabatan, $Position, $Deskripsi, $Des, $nama2, $Status, $date, $id);
-                    if($update){
-                        move_uploaded_file($file_tmp2, 'assets/pdf/people/'.$nama2); 
-                        chmod('assets/pdf/people/'.$nama2, 0777);
-                        echo "<script type='text/javascript'>alert('People Update Success');</script>";
-                    }else{
-                        echo "<script type='text/javascript'>alert('People Update Failed. PDF exsist');</script>";
-                    }
+        $file = false;       
+        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){ 
+            // Only allow PDFs by extension *and* MIME
+			$allowedExts = ['png', 'jpg', 'jpeg'];
+			$allowedMime = array('image/png', 'image/jpeg');
+            $tmpName = $_FILES['file2']['tmp_name'];
+		    $ukuran2 = $_FILES['file2']['size'];
+            $ext = strtolower(pathinfo($_FILES['file2']['name'], PATHINFO_EXTENSION));
+            $mime = mime_content_type($tmpName);
+
+            if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {  
+                if($ukuran2 < 150*MB){  
+                    $newFilename = uniqid('People_', true) . '.' . $ext;
+                    move_uploaded_file($tmpName, "assets/img/people/$newFilename");
+					chmod("assets/img/people/$newFilename", 0644); 
+                    $file = true;       
                 }else{
-                    echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    if ($ukuran2 >= 150 * MB) {
+                        logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for People ID $id.");
+                        echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    }
+                }         
+            } else{
+                if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+                    logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for People ID $id.");
                 }
-            }else{
-                echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
-            }
-        }else{
-            $update = $people->updateDataWithoutFileByUID($Name, $Jabatan, $Position, $Deskripsi, $Des, $Status, $date, $id);
-            if($update){
-                echo "<script type='text/javascript'>alert('People Update Success');</script>";
-            }else{
-                echo "<script type='text/javascript'>alert('People Update Failed. PDF exsist');</script>";
+			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
             }
         }
+
+        if($file == true){ 
+            $update = $people->updateDataByUID($Name, $Jabatan, $Position, $Deskripsi, $Des, $newFilename, $Status, $date, $id);
+        }else{
+            $update = $people->updateDataWithoutFileByUID($Name, $Jabatan, $Position, $Deskripsi, $Des, $Status, $date, $id);
+        }
+        
+        if ($update) {
+            logActivity("UPDATE", "People ID $id updated successfully" . ($file ? " with new file $newFilename." : " without file update."));
+            echo "<script type='text/javascript'>alert('People Update Success');</script>";
+        } else {
+            logActivity("UPDATE_FAIL", "Failed to update People ID $id. Possibly duplicate PDF.");
+            echo "<script type='text/javascript'>alert('People Update Failed. PDF exsist');</script>";
+        } 
+
         echo "<script type='text/javascript'>window.location='people'</script>";
-    }
-}else{
-    echo "<script type='text/javascript'>window.location='index'</script>";
-}
+    }  
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

@@ -2,9 +2,10 @@
 $title = "DASHBOARD | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php'; 
 
-if($_SESSION['login'] != true) { 
-	echo "<script> window.location.href = 'index';</script>";  
-} 
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    echo "<script>window.location='./index.php'</script>";
+    exit;
+} else{}
 ?>
 
 <body>

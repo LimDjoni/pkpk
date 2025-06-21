@@ -41,9 +41,9 @@ $dataAu = $audit->getData();
 	<section class="testimonial-section">
 		<div class="container"> 
 			<div class="row justify-content-center">  
-				<button class="button active" onClick="overviewFunction(this)"><a>Sekilas</a></button>
-				<button class="button" onClick="remunerationFunction(this)"><a>Laporan Tahunan</a></button>
-				<button class="button" onClick="nominatingFunction(this)"><a>Laporan Keuangan</a></button> 
+				<button class="button active" onClick="overviewFunction(this)">Sekilas</button>
+				<button class="button" onClick="remunerationFunction(this)">Laporan Tahunan</button>
+				<button class="button" onClick="nominatingFunction(this)">Laporan Keuangan</button> 
 			</div>
 		</div>
 	</section>
@@ -74,25 +74,25 @@ $dataAu = $audit->getData();
 							    <tr>
 							      <th scope="row">Pendapatan Usaha</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center;"><?php echo number_format($dataAu[$i]['Revenue'], 0, ',', '.')?></td> 
+								      <td style="color: black; text-align: center;"><?php echo number_format((float)$dataAu[$i]['Revenue'], 0, ',', '.')?></td> 
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Laba Sebelum Pajak</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['ProfitBfTax'], 0, ',', '.')?></td> 
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['ProfitBfTax'], 0, ',', '.')?></td> 
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Laba dapat diberikan ke Pemegang Saham</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['ProfitAttributable'], 0, ',', '.')?></td>  
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['ProfitAttributable'], 0, ',', '.')?></td>  
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Laba per Saham <sup>(1)</sup></th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['EarningsPerShare'], 2, ',', '.')?></td>   
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['EarningsPerShare'], 2, ',', '.')?></td>   
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
@@ -101,37 +101,37 @@ $dataAu = $audit->getData();
 							    <tr>
 							      <th scope="row">Aset tidak Lancar</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['NonCurrentAsset'], 0, ',', '.')?></td>    
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['NonCurrentAsset'], 0, ',', '.')?></td>    
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Aset Lancar</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['CurrentAssets'], 0, ',', '.')?></td>     
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['CurrentAssets'], 0, ',', '.')?></td>     
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Hutang tidak Lancar</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['NonCurrentLia'], 0, ',', '.')?></td>     
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['NonCurrentLia'], 0, ',', '.')?></td>     
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Hutang lancar</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['CurrentLia'], 0, ',', '.')?></td>  
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['CurrentLia'], 0, ',', '.')?></td>  
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">Nilai Aktiva Bersih (NAB) dapat diberikan ke Pemegang Saham</th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['AttEquity'], 0, ',', '.')?></td>   
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['AttEquity'], 0, ',', '.')?></td>   
 							  	  <?php } ?>
 							    </tr>
 							    <tr>
 							      <th scope="row">NAB per Saham <sup>(1)</sup></th>
 							      <?php for($i=0; $i<count($dataAu); $i++) { ?>
-								      <td style="color: black; text-align: center"><?php echo  number_format($dataAu[$i]['NavPerShare'], 2, ',', '.')?></td>  
+								      <td style="color: black; text-align: center"><?php echo  number_format((float)$dataAu[$i]['NavPerShare'], 2, ',', '.')?></td>  
 							  	  <?php } ?>
 							    </tr>
 							  </tbody>
@@ -208,3 +208,188 @@ $dataAu = $audit->getData();
 </body>
 
 </html>
+
+<script>
+	function overviewFunction(btn) {
+		document.getElementById("Overview").style.display = "block";
+		document.getElementById("Remuneration").style.display = "none";
+		document.getElementById("Nominating").style.display = "none";
+
+		updateActiveButton(btn);
+	}
+
+	function remunerationFunction(btn) {
+		document.getElementById("Overview").style.display = "none";
+		document.getElementById("Remuneration").style.display = "block";
+		document.getElementById("Nominating").style.display = "none";
+
+		updateActiveButton(btn);
+	}
+
+	function nominatingFunction(btn) {
+		document.getElementById("Overview").style.display = "none";
+		document.getElementById("Remuneration").style.display = "none";
+		document.getElementById("Nominating").style.display = "block";
+
+		updateActiveButton(btn);
+	}
+
+	function updateActiveButton(btn) {
+		const buttons = document.querySelectorAll(".button");
+		buttons.forEach(b => b.classList.remove("active"));
+		btn.classList.add("active");
+	}
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPageAnnual = parseInt($('#totalPagesAnnual').val());   
+        console.log("==totalPageAnnual=="+totalPageAnnual);
+
+        $('#paginationAnnual').simplePaginator({
+            totalPages: totalPageAnnual,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#contentAnnual").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_annual_report.php",
+                    method:"POST",
+                    dataType: "json",    
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#contentAnnual').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput").on("change",function(){
+	    	var year = $(this).val();  
+	        $.ajax({
+		        url :"total_data_annual_report.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPagesAnnual').val(obj.totalData);   
+
+			    	var totalPageAnnual = parseInt($('#totalPagesAnnual').val());   
+			    	console.log("==totalPageAnnual=="+totalPageAnnual);
+			      
+			        $('#pagination').simplePaginator({
+			            totalPages: totalPageAnnual,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#contentAnnual").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_annual_report.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#contentAnnual').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>  
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPage = parseInt($('#totalPages').val());   
+
+        var pag = $('#pagination').simplePaginator({
+            totalPages: totalPage,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#content").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_financial_statement.php",
+                    method:"POST",
+                    dataType: "json",       
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#content').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput1").on("change",function(){
+	    	var year = $(this).val(); 
+	        $.ajax({
+		        url :"total_data_financial_statement.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPages').val(obj.totalData);   
+
+			    	var totalPage = parseInt($('#totalPages').val());   
+			      
+			        $('#pagination').simplePaginator({
+			            totalPages: totalPage,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#content").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_financial_statement.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#content').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>  

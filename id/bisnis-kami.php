@@ -24,11 +24,11 @@ $OB = $ourBusinesses->getData();
 
 	<section class="testimonial-section">
 		<div class="container">
-			<div class="row justify-content-center">  
-				<button class="button active" onClick="miningFunction(this)"><a>Tambang</a></button>
-				<button class="button" onClick="equipmentFunction(this)"><a>Perlengkapan</a></button>
-				<button class="button" onClick="landPreparationFunction(this)"><a>Persiapan Lahan</a></button>
-				<button class="button" onClick="constructionFunction(this)"><a>Konstruksi</a></button>
+			<div class="row justify-content-center">   
+				<button class="button active" onClick="showSection('Mining', this)">Tambang</button>
+				<button class="button" onClick="showSection('Equipment', this)">Perlengkapan</button>
+				<button class="button" onClick="showSection('Land', this)">Persiapan Lahan</button>
+				<button class="button" onClick="showSection('Construction', this)">Konstruksi</button>
 			</div>
 		</div>
 	</section>
@@ -78,3 +78,22 @@ $OB = $ourBusinesses->getData();
 </body>
 
 </html>
+
+<script>
+function showSection(sectionId, btn) {
+    // Hide all sections
+    const sections = ['Mining', 'Equipment', 'Land', 'Construction'];
+    sections.forEach(id => {
+        document.getElementById(id).style.display = 'none';
+    });
+
+    // Remove 'active' class from all buttons
+    document.querySelectorAll('.button').forEach(btn => btn.classList.remove('active'));
+
+    // Show selected section
+    document.getElementById(sectionId).style.display = 'flex';
+
+    // Mark clicked button as active
+    btn.classList.add('active');
+}
+</script>

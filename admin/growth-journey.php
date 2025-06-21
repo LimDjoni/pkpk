@@ -1,45 +1,69 @@
 <?php 
 $title = "Growth Journey | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Add Growth Journey.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else {
 	$decoded = $growthjc->getData();   
 	
-	if (isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
-		$title = $_POST['Title'];
-		$year = $_POST['Year'];
-		$desc = $_POST['desc'];
-		$judul = $_POST['Judul'];
-		$deskripsi = $_POST['desc2']; 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
+		function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
 
-		$ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
-		$nama2 = $_FILES['file2']['name'];
-		$y = explode('.', $nama2);
-		$ekstensi2 = strtolower(end($y));
-		$ukuran2 = $_FILES['file2']['size'];
-		$file_tmp2 = $_FILES['file2']['tmp_name'];
+		$title = clean_input($_POST['Title']);
+		$year = (int) $_POST['Year'];
+		$desc = urlencode(clean_input($_POST['desc']));
+		$judul = clean_input($_POST['Judul']);
+		$deskripsi = urlencode(clean_input($_POST['desc2']));
+ 
+		$allowedExts = ['png', 'jpg', 'jpeg'];
+		$allowedMime = array('image/png', 'image/jpeg');
+		$nama2       = $_FILES['file2']['name'];
+		$ext         = strtolower(pathinfo($nama2, PATHINFO_EXTENSION));
+		$mime        = mime_content_type($_FILES['file2']['tmp_name']);
+		$ukuran2     = $_FILES['file2']['size'];
+		$file_tmp2   = $_FILES['file2']['tmp_name'];
 
-		if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-			if($ukuran2 < 150*MB){    
-				$add = $growthjc->addReport($judul, $title, $year, $desc, $deskripsi, $nama2, $date);
-				if($add){  
-					move_uploaded_file($file_tmp2, 'assets/img/growthjourney/'.$nama2); 
-					chmod('assets/img/growthjourney/'.$nama2, 0777);
+		if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {
+			if ($ukuran2 < 150 * 1024 * 1024) {
+				$newFilename = uniqid('Growth_Journey_', true) . '.' . $ext;
+				
+				$add = $growthjc->addReport($judul, $title, $year, $desc, $deskripsi, $newFilename, $date); 
+				if ($add) {
+					move_uploaded_file($file_tmp2, "assets/img/growthjourney/$newFilename");
+					chmod("assets/img/growthjourney/$newFilename", 0644);   
+					logActivity("GROWTH_JOURNEY_ADD_SUCCESS", "Growth Journey added: $newFilename by {$_SESSION['username']}");
 					echo "<script type='text/javascript'>alert('Growth Journey Added Success');</script>";
 				}else{
-					echo "<script type='text/javascript'>alert('Growth Journey Added Failed. PDF exsist');</script>";
+					logActivity("GROWTH_JOURNEY_ADD_FAILED", "Duplicate or DB error on add.");
+					echo "<script type='text/javascript'>alert('Growth Journey Added Failed. img exsist');</script>";
 				}
 			}else{
+				logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for Growth Journey ID $id.");
 				echo "<script type='text/javascript'>alert('File Too Big');</script>";
 			}
 		}else{
+			if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+				logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for Growth Journey ID $id.");
+			}
 			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
 		}
 		echo "<script type='text/javascript'>window.location='growth-journey'</script>";
-	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+	}  	
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">
@@ -184,7 +208,7 @@ if($_SESSION['login'] == true) {
 													<td><?php echo $decoded[$x]['PDF']; ?></td>
 													<td>
 														<a href="editGrowthJourney?id=<?php echo $decoded[$x]['ID_GJ']; ?>" name="edit" class="btn btn-primary">Edit</a> 
-														<!-- <a href="#myModal" class="btn btn-danger" data-href="deleteGrowthJourney?id=<?php echo $decoded[$x]['ID_GJ']; ?>" data-toggle="modal" data-target="#myModal">Delete</a>  -->
+														<a href="#myModal" class="btn btn-danger" data-href="deleteGrowthJourney?id=<?php echo $decoded[$x]['ID_GJ']; ?>" data-toggle="modal" data-target="#myModal">Delete</a>
 													</td>
 												</tr>
 												<?php $no++; }

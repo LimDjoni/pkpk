@@ -26,7 +26,7 @@ $GJdata = $growthJrny->getData();
     <?php for($j=0; $j< count($GJdata); $j++){ 
       if($j%2==0) { ?>
     <li>
-      <div class="timeline-badge"><img class="rounded-circle" src="../admin/assets/img/growthjourney/<?php echo $GJdata[$j]['PDF']; ?>" alt="" /> </div>
+      <div class="timeline-badge"><img class="rounded-circle" src="./admin/assets/img/growthjourney/<?php echo $GJdata[$j]['PDF']; ?>" alt="" /> </div>
       <div class="timeline-panel">
         <div class="timeline-heading">
           <h4 class="timeline-title"><?php echo $GJdata[$j]['Tahun']; ?></h4>
@@ -39,7 +39,7 @@ $GJdata = $growthJrny->getData();
     </li>
   <?php }else{ ?>
     <li class="timeline-inverted">
-      <div class="timeline-badge"><img class="rounded-circle" src="../admin/assets/img/growthjourney/<?php echo $GJdata[$j]['PDF']; ?>" alt="" /> </div>
+      <div class="timeline-badge"><img class="rounded-circle" src="./admin/assets/img/growthjourney/<?php echo $GJdata[$j]['PDF']; ?>" alt="" /> </div>
       <div class="timeline-panel">
         <div class="timeline-heading">
           <h4 class="timeline-title"><?php echo $GJdata[$j]['Tahun']; ?></h4>

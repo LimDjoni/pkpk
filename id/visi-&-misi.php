@@ -26,10 +26,10 @@ $VMdata = $vissionmission->getData();
 	<section class="testimonial-section">
 		<div class="container">
 			<div class="row justify-content-center">  
-				<button class="button active" onClick="vissionFunction(this)"><a>Visi</a></button>
-				<button class="button" onClick="missionFunction(this)"><a>Misi</a></button>
-				<button class="button" onClick="mottoFunction(this)"><a>Moto</a></button>
-				<button class="button" onClick="phylosophyFunction(this)"><a>Filosofi</a></button>
+				<button class="button active" onClick="vissionFunction(this)">Visi</button>
+				<button class="button" onClick="missionFunction(this)">Misi</button>
+				<button class="button" onClick="mottoFunction(this)">Moto</button>
+				<button class="button" onClick="phylosophyFunction(this)">Filosofi</button>
 			</div>
 		</div>
 	</section>
@@ -77,3 +77,40 @@ $VMdata = $vissionmission->getData();
 </body>
 
 </html>
+
+
+
+<script>
+function hideAll() {
+	document.getElementById("Vision").style.display = "none";
+	document.getElementById("Mission").style.display = "none";
+	document.getElementById("Motto").style.display = "none";
+	document.getElementById("Phylosophy").style.display = "none";
+
+	document.querySelectorAll(".button").forEach(btn => btn.classList.remove("active"));
+}
+
+function vissionFunction(btn) {
+	hideAll();
+	document.getElementById("Vision").style.display = "flex";
+	btn.classList.add("active");
+}
+
+function missionFunction(btn) {
+	hideAll();
+	document.getElementById("Mission").style.display = "flex";
+	btn.classList.add("active");
+}
+
+function mottoFunction(btn) {
+	hideAll();
+	document.getElementById("Motto").style.display = "flex";
+	btn.classList.add("active");
+}
+
+function phylosophyFunction(btn) {
+	hideAll();
+	document.getElementById("Phylosophy").style.display = "flex";
+	btn.classList.add("active");
+}
+</script>

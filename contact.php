@@ -72,6 +72,7 @@ include 'include/header.php' ?>
 		</div>
 	</section>
 	<!-- Contact Section End --> 
+	 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 	<!-- Footer -->
 	<?php include 'include/footer.php' ?>
@@ -79,3 +80,36 @@ include 'include/header.php' ?>
 </body>
 
 </html>
+
+	<script>
+	$('#contact-form').on('submit', function (e) {
+		e.preventDefault(); // Stop default form
+
+		$('.site-btn').prop('disabled', true);
+		$('#spinner').show();
+		$('.messages').html('');
+
+		$.ajax({
+			type: 'POST',
+			url: 'proceed.php', // make sure this path is correct
+			data: $(this).serialize(),
+			dataType: 'json',
+			success: function (response) {
+				$('#spinner').hide();
+				$('.site-btn').prop('disabled', false);
+				if (response.type === 'success') {
+					$('.messages').html('<div class="alert alert-success">' + response.message + '</div>');
+					$('#contact-form')[0].reset();
+					grecaptcha.reset(); // Reset reCAPTCHA
+				} else {
+					$('.messages').html('<div class="alert alert-danger">' + response.message + '</div>');
+				}
+			},
+			error: function () {
+				$('#spinner').hide();
+				$('.site-btn').prop('disabled', false);
+				$('.messages').html('<div class="alert alert-danger">There was a server error. Please try again later.</div>');
+			}
+		});
+	}); 
+	</script>

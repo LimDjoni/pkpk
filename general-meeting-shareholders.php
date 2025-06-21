@@ -35,9 +35,9 @@ $gmsMOMTahun = $rupsMOM->getDataTahun();
 	<section class="testimonial-section">
 		<div class="container">
 			<div class="row justify-content-center">  
-				<button class="button active" onClick="overviewFunction(this)"><a>GMS Announcement</a></button>
-				<button class="button" onClick="remunerationFunction(this)"><a>GMS Invitation</a></button>
-				<button class="button" onClick="nominatingFunction(this)"><a>GMS Minutes of Meeting</a></button> 
+				<button class="button active" onClick="overviewFunction(this)">GMS Announcement</button>
+				<button class="button" onClick="remunerationFunction(this)">GMS Invitation</button>
+				<button class="button" onClick="nominatingFunction(this)">GMS Minutes of Meeting</button> 
 			</div>
 		</div>
 	</section>
@@ -142,3 +142,269 @@ $gmsMOMTahun = $rupsMOM->getDataTahun();
 </body>
 
 </html>
+
+<script>
+	function overviewFunction(btn) {
+		document.getElementById("Overview").style.display = "block";
+		document.getElementById("Remuneration").style.display = "none";
+		document.getElementById("Nominating").style.display = "none";
+
+		updateActiveButton(btn);
+	}
+
+	function remunerationFunction(btn) {
+		document.getElementById("Overview").style.display = "none";
+		document.getElementById("Remuneration").style.display = "block";
+		document.getElementById("Nominating").style.display = "none";
+
+		updateActiveButton(btn);
+	}
+
+	function nominatingFunction(btn) {
+		document.getElementById("Overview").style.display = "none";
+		document.getElementById("Remuneration").style.display = "none";
+		document.getElementById("Nominating").style.display = "block";
+
+		updateActiveButton(btn);
+	}
+
+	function updateActiveButton(btn) {
+		const buttons = document.querySelectorAll(".button");
+		buttons.forEach(b => b.classList.remove("active"));
+		btn.classList.add("active");
+	}  
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPageAnnounce = parseInt($('#totalPagesAnnounce').val());   
+        console.log("==totalPageAnnounce=="+totalPageAnnounce);
+
+        var pag = $('#pagination2').simplePaginator({
+            totalPages: totalPageAnnounce,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#contentAnnounce").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_rups_announcement.php",
+                    method:"POST",
+                    dataType: "json",       
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#contentAnnounce').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput2").on("change",function(){
+	    	var year = $(this).val(); 
+	        $.ajax({
+		        url :"total_data_rups_announcement.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPagesAnnounce').val(obj.totalData);   
+
+			    	var totalPageAnnounce = parseInt($('#totalPagesAnnounce').val());   
+			    	console.log("==totalPageAnnounce=="+totalPageAnnounce);
+			      
+			        $('#pagination2').simplePaginator({
+			            totalPages: totalPageAnnounce,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#contentAnnounce").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_rups_announcement.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#contentAnnounce').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>  
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPageInvitation = parseInt($('#totalPagesInvitation').val());   
+        console.log("==totalPageInvitation=="+totalPageInvitation);
+
+        var pag = $('#paginationInvitation').simplePaginator({
+            totalPages: totalPageInvitation,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#contentInvitation").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_rups_invitation.php",
+                    method:"POST",
+                    dataType: "json",       
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#contentInvitation').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput3").on("change",function(){
+	    	var year = $(this).val(); 
+	        $.ajax({
+		        url :"total_data_rups_invitation.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPagesInvitation').val(obj.totalData);   
+
+			    	var totalPageInvitation = parseInt($('#totalPagesInvitation').val());   
+			    	console.log("==totalPageInvitation=="+totalPageInvitation);
+			      
+			        $('#paginationInvitation').simplePaginator({
+			            totalPages: totalPageInvitation,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#contentInvitation").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_rups_invitation.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#contentInvitation').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>  
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPageMOM = parseInt($('#totalPagesMOM').val());   
+        console.log("==totalPageMOM=="+totalPageMOM);
+
+        var pag = $('#paginationMOM').simplePaginator({
+            totalPages: totalPageMOM,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#contentMOM").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_rups_mom.php",
+                    method:"POST",
+                    dataType: "json",       
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#contentMOM').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput4").on("change",function(){
+	    	var year = $(this).val(); 
+	        $.ajax({
+		        url :"total_data_rups_mom.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPagesMOM').val(obj.totalData);   
+
+			    	var totalPageMOM = parseInt($('#totalPagesMOM').val());   
+			    	console.log("==totalPageMOM=="+totalPageMOM);
+			      
+			        $('#paginationMOM').simplePaginator({
+			            totalPages: totalPageMOM,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#contentMOM").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_rups_mom.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#contentMOM').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>  

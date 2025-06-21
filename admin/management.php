@@ -1,48 +1,23 @@
 <?php 
 $title = "Management | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$decoded = $management->getData(); 
-	
-	// if ( isset($_FILES['file2']) && isset($_POST['bocEng']) && isset($_POST['bocIndo']) && isset($_POST['bodEng']) && isset($_POST['bodIndo']) && isset($_POST['acEng']) && isset($_POST['acIndo']) && isset($_POST['csEng']) && isset($_POST['csIndo']) && isset($_POST['addFH'])){ 
-	// 	$bocEng = $_POST['bocEng'];
-	// 	$bocIndo = $_POST['bocIndo'];
-	// 	$bodEng = $_POST['bodEng'];
-	// 	$bodIndo = $_POST['bodIndo'];
-	// 	$acEng = $_POST['acEng'];
-	// 	$acIndo = $_POST['acIndo'];
-	// 	$csEng = $_POST['csEng'];
-	// 	$csIndo = $_POST['csIndo'];
-
-	// 	$ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
-	// 	$nama2 = $_FILES['file2']['name'];
-	// 	$y = explode('.', $nama2);
-	// 	$ekstensi2 = strtolower(end($y));
-	// 	$ukuran2 = $_FILES['file2']['size'];
-	// 	$file_tmp2 = $_FILES['file2']['tmp_name'];
-
-	// 	if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-	// 		if($ukuran2 < 150*MB){   
-	// 			$add = $management->addReport($nama2, $bocEng, $bocIndo, $bodEng, $bodIndo, $acEng, $acIndo, $csEng, $csIndo, $date);
-	// 			if($add){ 
-	// 				move_uploaded_file($file_tmp2, 'assets/img/management/'.$nama2); 
-	// 				chmod('assets/img/management/'.$nama2, 0777);
-	// 				echo "<script type='text/javascript'>alert('Management Added Success');</script>";
-	// 			}else{
-	// 				echo "<script type='text/javascript'>alert('Management Added Failed. PDF exsist');</script>";
-	// 			}
-	// 		}else{
-	// 			echo "<script type='text/javascript'>alert('File Too Big');</script>";
-	// 		}
-	// 	}else{
-	// 		echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
-	// 	}
-	// 	echo "<script type='text/javascript'>window.location='management'</script>";
-	// }
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
 }
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to View Management.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else {
+	$decoded = $management->getData();  
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">
@@ -74,84 +49,6 @@ if($_SESSION['login'] == true) {
 					</div>
 				</div><!-- /.container-fluid -->
 			</section>
-
-			<!-- Main content -->
-			<!-- <section class="content">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-8">
-							<div class="card card-primary">
-								<div class="card-header">
-									<h3 class="card-title">Create New Data</h3>
-								</div>
-								<form action="" method="POST" enctype="multipart/form-data">
-									<div class="row"> 
-										<div class="card-body col-md-12">
-											<div class="form-group">
-												<label for="exampleInputEmail1">Overview</label>
-												<input type="file" id="file2" name="file2">
-											</div> 
-										</div> 
-										<div class="card-body col-md-6">
-											<label for="exampleInputEmail1">English</label>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Board Of Commissioners</label>
-												<textarea id="Remark" name="bocEng" class="form-control" rows="4" cols="50" placeholder="Enter Board Of Commissioners in English"></textarea> 
-											</div>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Board Of Directors</label>
-												<textarea id="Remark" name="bodEng" class="form-control" rows="4" cols="50" placeholder="Enter Board Of Directors in English"></textarea> 
-											</div>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Audit Comittee</label>
-												<textarea id="Remark" name="acEng" class="form-control" rows="4" cols="50" placeholder="Enter Audit Comittee in English"></textarea> 
-											</div>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Corporate Secretary</label>
-												<textarea id="Remark" name="csEng" class="form-control" rows="4" cols="50" placeholder="Enter Corporate Secretary in English"></textarea> 
-											</div>  
-										</div>
-										<div class="card-body col-md-6"> 
-											<label for="exampleInputEmail1">Indonesia</label>  
-											<div class="form-group">
-												<label for="exampleInputEmail1">Dewan Komisioner</label>
-												<textarea id="Remark" name="bocIndo" class="form-control" rows="4" cols="50" placeholder="Enter Dewan Komisioner in Indonesia"></textarea> 
-											</div>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Direksi</label>
-												<textarea id="Remark" name="bodIndo" class="form-control" rows="4" cols="50" placeholder="Enter Direksi in Indonesia"></textarea> 
-											</div>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Komite Audit</label>
-												<textarea id="Remark" name="acIndo" class="form-control" rows="4" cols="50" placeholder="Enter Komite Audit in Indonesia"></textarea> 
-											</div>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Sekretaris Perusahaan</label>
-												<textarea id="Remark" name="csIndo" class="form-control" rows="4" cols="50" placeholder="Enter Sekretaris Perusahaan in Indonesia"></textarea> 
-											</div>
-										</div>
-									</div>
-									<div class="card-footer">
-										<button type="submit" name="addFH" class="btn btn-primary">Submit</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section> -->
-			<!-- /.content -->
-
-			<!-- Content Header (Page header) -->
-			<!-- <section class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1>Data Management</h1>
-						</div>
-					</div>
-				</div>
-			</section> -->
  
 			<!-- Main content -->
 			<section class="content">

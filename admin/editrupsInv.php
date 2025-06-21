@@ -1,55 +1,93 @@
 <?php 
 $title = "Edit GMS Invitation | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit RUPS Invitation.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
     $id = $_GET['id'];
     $decoded = $rupsInv->getDataByUid($id);  
 
-    if (isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['editRep'])){ 
-        $title = $_POST['Title'];
-        $year = $_POST['Year'];
-        $desc = $_POST['desc'];
-        $judul = $_POST['Judul'];
-        $deskripsi = $_POST['desc2'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['editRep'])){ 
+        function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
 
-        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){
-        $ekstensi_diperbolehkan2 = array('pdf');
-        $nama2 = $_FILES['file2']['name'];
-        $y = explode('.', $nama2);
-        $ekstensi2 = strtolower(end($y));
-        $ukuran2 = $_FILES['file2']['size'];
-        $file_tmp2 = $_FILES['file2']['tmp_name'];
+		$title = clean_input($_POST['Title']);
+		$year = (int) $_POST['Year'];
+		$desc = urlencode(clean_input($_POST['desc']));
+		$judul = clean_input($_POST['Judul']);
+		$deskripsi = urlencode(clean_input($_POST['desc2']));
 
-        if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
+		$ekstensi_diperbolehkan2 = array('pdf');
+		$nama2 = $_FILES['file2']['name'];
+		$y = explode('.', $nama2);
+		$ekstensi2 = strtolower(end($y));
+		$ukuran2 = $_FILES['file2']['size'];
+		$file_tmp2 = $_FILES['file2']['tmp_name'];
+
+        $file = false;    
+        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){ 
+            // Only allow PDFs by extension *and* MIME
+            $allowedExts = ['pdf'];
+            $allowedMime = ['application/pdf'];
+            $tmpName = $_FILES['file2']['tmp_name'];
+            $ext = strtolower(pathinfo($_FILES['file2']['name'], PATHINFO_EXTENSION));
+            $mime = mime_content_type($tmpName);
+
+            if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {  
                 if($ukuran2 < 150*MB){  
-                    $update = $rupsInv->updateDataByUID($judul, $title, $year, urlencode($desc), urlencode($deskripsi), $nama2, $date, $id);
-                    if($update){
-                        move_uploaded_file($file_tmp2, 'assets/pdf/rupsInv/'.$nama2); 
-                        chmod('assets/pdf/rupsInv/'.$nama2, 0777);
-                        echo "<script type='text/javascript'>alert('GSM Invitation Update Success');</script>";
-                    }else{
-                        echo "<script type='text/javascript'>alert('GSM Invitation Update Failed. PDF exsist');</script>";
-                    }
+                    $newFilename = uniqid('RUPS_Invitation_', true) . '.pdf';
+                    move_uploaded_file($tmpName, "assets/pdf/rupsInv/$newFilename");
+					chmod("assets/pdf/rupsInv/$newFilename", 0644); 
+                    $file = true;       
                 }else{
-                    echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    if ($ukuran2 >= 150 * MB) {
+                        logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for RUPS Invitation ID $id.");
+                        echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    }
+                }         
+            } else{
+                if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+                    logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for RUPS Invitation ID $id.");
                 }
-            }else{
-                echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
-            }
-        }else{
-            $update = $rupsInv->updateDataWithoutFileByUID($judul, $title, $year, urlencode($desc), urlencode($deskripsi), $date, $id);
-            if($update){
-                echo "<script type='text/javascript'>alert('GSM Invitation Update Success');</script>";
-            }else{
-                echo "<script type='text/javascript'>alert('GSM Invitation Update Failed. PDF exsist');</script>";
+			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
             }
         }
+
+        if($file == true){ 
+            $update = $rupsInv->updateDataByUID($judul, $title, $year, $desc, $deskripsi, $newFilename, $date, $id);
+        }else{
+            $update = $rupsInv->updateDataWithoutFileByUID($judul, $title, $year, $desc, $deskripsi, $date, $id);
+        }
+        
+        if ($update) {
+            logActivity("UPDATE", "RUPS Invitation ID $id updated successfully" . ($file ? " with new file $newFilename." : " without file update."));
+            echo "<script type='text/javascript'>alert('RUPS Invitation Update Success');</script>";
+        } else {
+            logActivity("UPDATE_FAIL", "Failed to update RUPS Invitation ID $id. Possibly duplicate PDF.");
+            echo "<script type='text/javascript'>alert('RUPS Invitation Update Failed. PDF exsist');</script>";
+        } 
+
         echo "<script type='text/javascript'>window.location='gms-invitation'</script>";
-    }
-}else{
-    echo "<script type='text/javascript'>window.location='index'</script>";
-}
+    } 
+}  
 ?> 
 
 <body class="hold-transition sidebar-mini">

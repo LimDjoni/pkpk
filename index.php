@@ -22,7 +22,7 @@ $indx = $home->getData();?>
     <div class="hs-slider owl-carousel normal">
       <?php for($i=0; $i< count($indx); $i++){ ?>
         <div class="hs-item"> 
-          <img class="mx-auto" src="admin/assets/img/home/<?php echo $indx[$i]['ImgEng']; ?>">
+          <img class="mx-auto" src="admin/assets/img/home/<?php echo htmlspecialchars($indx[$i]['ImgEng']); ?>" alt="PKPK Slide <?php echo $i+1; ?>">
         </div>
       <?php } ?>
     </div>
@@ -35,3 +35,27 @@ $indx = $home->getData();?>
 </body>
 
 </html>
+
+<script>
+$('.normal').owlCarousel({
+    loop:false, 
+    nav:false,
+    autoplay:false,
+    autoplayTimeout:9000,
+    dots: false,
+    responsive:{
+        0:{
+            items:1
+        },
+        640:{
+            items:1
+        },
+      	960:{
+            items:1
+        },
+        1200:{
+            items:1
+        }
+    } 
+})
+</script>  

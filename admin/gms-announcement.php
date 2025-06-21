@@ -1,47 +1,69 @@
 <?php 
 $title = "GMS Announcement | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Add RUPS Announcement.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else {
 	$decoded = $rupsAnnounce->getData(); 
 	
-	if (isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
-		$title = $_POST['Title'];
-		$year = $_POST['Year'];
-		$desc = $_POST['desc'];
-		$judul = $_POST['Judul'];
-		$deskripsi = $_POST['desc2'];
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
+		function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
 
-		$ekstensi_diperbolehkan2 = array('pdf');
-		$nama2 = $_FILES['file2']['name'];
-		$y = explode('.', $nama2);
-		$ekstensi2 = strtolower(end($y));
-		$ukuran2 = $_FILES['file2']['size'];
-		$file_tmp2 = $_FILES['file2']['tmp_name'];
+		$title = clean_input($_POST['Title']);
+		$year = (int) $_POST['Year'];
+		$desc = urlencode(clean_input($_POST['desc']));
+		$judul = clean_input($_POST['Judul']);
+		$deskripsi = urlencode(clean_input($_POST['desc2']));
 
-		if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-			if($ukuran2 < 150*MB){   
-				$add = $rupsAnnounce->addReport($judul, $title, $year, urlencode($desc), urlencode($deskripsi), $nama2, $date);
-				if($add){
-					// move_uploaded_file($file_tmp, 'assets/img/rupsAnnounce/'.$nama);
-					move_uploaded_file($file_tmp2, 'assets/pdf/rupsAnnounce/'.$nama2);
-					// chmod('assets/img/rupsAnnounce/'.$nama, 0664);
-					chmod('assets/pdf/rupsAnnounce/'.$nama2, 0777);
-					echo "<script type='text/javascript'>alert('GMS Announcement Added Success');</script>";
+		$allowedExts = ['pdf'];
+		$allowedMime = ['application/pdf'];
+		$nama2       = $_FILES['file2']['name'];
+		$ext         = strtolower(pathinfo($nama2, PATHINFO_EXTENSION));
+		$mime        = mime_content_type($_FILES['file2']['tmp_name']);
+		$ukuran2     = $_FILES['file2']['size'];
+		$file_tmp2   = $_FILES['file2']['tmp_name'];
+
+		if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {
+			if ($ukuran2 < 150 * 1024 * 1024) {
+				$newFilename = uniqid('RUPS_Announce_', true) . '.pdf'; 
+			
+				$add = $rupsAnnounce->addReport($judul, $title, $year, $desc, $deskripsi, $uniqueName, $date);
+				if ($add) {
+					move_uploaded_file($file_tmp2, "assets/pdf/rupsAnnounce/$newFilename");
+					chmod("assets/pdf/rupsAnnounce/$newFilename", 0644);  
+					logActivity("RUPS_ANNOUNCE_ADD_SUCCESS", "RUPS Announce added: $newFilename by {$_SESSION['username']}"); 
+					echo "<script type='text/javascript'>alert('RUPS Announce Added Success');</script>";
 				}else{
-					echo "<script type='text/javascript'>alert('GMS Announcement Added Failed. PDF exsist');</script>";
+					logActivity("RUPS_ANNOUNCE_ADD_FAILED", "Duplicate or DB error on add.");
+					echo "<script type='text/javascript'>alert('RUPS Announce Added Failed. PDF exsist');</script>";
 				}
 			}else{
+				logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for RUPS Announce ID $id.");
 				echo "<script type='text/javascript'>alert('File Too Big');</script>";
 			}
 		}else{
+			if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+				logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for RUPS Announce ID $id.");
+			}
 			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
 		}
 		echo "<script type='text/javascript'>window.location='gms-announcement'</script>";
-	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+	}  
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

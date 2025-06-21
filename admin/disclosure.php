@@ -1,47 +1,64 @@
 <?php 
 $title = "Disclosure Information | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php';
 
-if($_SESSION['login'] == true) {
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+    logActivity("CSRF_MISSING", "CSRF token missing in session.");
+	http_response_code(403);
+   	exit('Invalid CSRF token.');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Add Disclosure Information.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
 	$decoded = $disclosure->getData(); 
 	
-	if (isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
-		$title = $_POST['Title'];
-		$year = $_POST['Year'];
-		$desc = $_POST['desc'];
-		$judul = $_POST['Judul'];
-		$deskripsi = $_POST['desc2'];
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Title']) && isset($_POST['Judul']) && isset($_POST['Year']) && isset($_FILES['file2']) && isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){ 
+		$title     = htmlspecialchars(trim($_POST['Title']));
+		$year      = (int)$_POST['Year'];
+		$desc      = urlencode(htmlspecialchars(trim($_POST['desc'])));
+		$judul     = htmlspecialchars(trim($_POST['Judul']));
+		$deskripsi = urlencode(htmlspecialchars(trim($_POST['desc2'])));
 
-		$ekstensi_diperbolehkan2 = array('pdf');
-		$nama2 = $_FILES['file2']['name'];
-		$y = explode('.', $nama2);
-		$ekstensi2 = strtolower(end($y));
-		$ukuran2 = $_FILES['file2']['size'];
-		$file_tmp2 = $_FILES['file2']['tmp_name'];
+		$allowedExts = ['pdf'];
+		$allowedMime = ['application/pdf'];
+		$nama2       = $_FILES['file2']['name'];
+		$ext         = strtolower(pathinfo($nama2, PATHINFO_EXTENSION));
+		$mime        = mime_content_type($_FILES['file2']['tmp_name']);
+		$ukuran2     = $_FILES['file2']['size'];
+		$file_tmp2   = $_FILES['file2']['tmp_name'];
 
-		if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-			if($ukuran2 < 150*MB){   
-				$add = $disclosure->addReport($judul, $title, $year, urlencode($desc), urlencode($deskripsi), $nama2, $date);
-				if($add){
-					// move_uploaded_file($file_tmp, 'assets/img/disclosure/'.$nama);
-					move_uploaded_file($file_tmp2, 'assets/pdf/disclosure/'.$nama2);
-					// chmod('assets/img/disclosure/'.$nama, 0664);
-					chmod('assets/pdf/disclosure/'.$nama2, 0777);
-					echo "<script type='text/javascript'>alert('Disclosure Information Added Success');</script>";
-				}else{
-					echo "<script type='text/javascript'>alert('Disclosure Information  Added Failed. PDF exsist');</script>";
+		if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {
+			if ($ukuran2 < 150 * 1024 * 1024) {
+				$newFilename = uniqid('Disclosure_Information_', true) . '.pdf';
+
+				$add = $disclosure->addReport($judul, $title, $year, $desc, $deskripsi, $newFilename, $date);
+				if ($add) {
+					move_uploaded_file($file_tmp2, "assets/pdf/disclosure/$newFilename");
+					chmod("assets/pdf/disclosure/$newFilename", 0644);
+					logActivity("DISCLOSURE_ADD_SUCCESS", "Disclosure added: $newFilename by {$_SESSION['username']}");
+					echo "<script>alert('Disclosure Information Added Successfully');</script>";
+				} else {
+					logActivity("DISCLOSURE_ADD_FAILED", "Duplicate or DB error on add.");
+					echo "<script>alert('Disclosure Information Failed. PDF might already exist');</script>";
 				}
-			}else{
-				echo "<script type='text/javascript'>alert('File Too Big');</script>";
+			} else {
+				logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for Disclosure Information ID $id.");
+				echo "<script>alert('File too large');</script>";
 			}
-		}else{
+		} else {
+			if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+				logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for Annual Report ID $id.");
+			}
 			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
 		}
-		echo "<script type='text/javascript'>window.location='disclosure'</script>";
-	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+		echo "<script>window.location='disclosure'</script>";
+	} 
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

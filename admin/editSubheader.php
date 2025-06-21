@@ -1,55 +1,87 @@
 <?php 
 $title = "Edit Subheader | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-    $id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Subheader.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id']; 
     $decoded = $subheaderCt->getDataByUid($id);  
 
-    if (isset($_FILES['file2']) && isset($_POST['pageInd']) && isset($_POST['pageEng']) && isset($_POST['PageNameInd']) && isset($_POST['PageNameEng']) && isset($_POST['desc2']) && isset($_POST['editRep'])){ 
-        $desc = $_POST['desc2'];
-        $pageEng = $_POST['pageEng'];
-        $pageInd = $_POST['pageInd'];
-        $PageNameInd = $_POST['PageNameInd'];
-        $PageNameEng = $_POST['PageNameEng'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file2']) && isset($_POST['pageInd']) && isset($_POST['pageEng']) && isset($_POST['PageNameInd']) && isset($_POST['PageNameEng']) && isset($_POST['desc2']) && isset($_POST['editRep'])){ 
+        function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
 
-        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){
-            $ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
-            $nama2 = $_FILES['file2']['name'];
-            $y = explode('.', $nama2);
-            $ekstensi2 = strtolower(end($y));
-            $ukuran2 = $_FILES['file2']['size'];
-            $file_tmp2 = $_FILES['file2']['tmp_name'];
+		$desc = urlencode(clean_input($_POST['desc2']));
+		$pageEng = urlencode(clean_input($_POST['pageEng']));
+		$pageInd = urlencode(clean_input($_POST['pageInd']));
+		$PageNameInd = urlencode(clean_input($_POST['PageNameInd']));
+		$PageNameEng = urlencode(clean_input($_POST['PageNameEng']));
 
-            if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
+        $file = false;       
+        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){ 
+            // Only allow PDFs by extension *and* MIME
+			$allowedExts = ['png', 'jpg', 'jpeg'];
+			$allowedMime = array('image/png', 'image/jpeg');
+            $tmpName = $_FILES['file2']['tmp_name'];
+		    $ukuran2 = $_FILES['file2']['size'];
+            $ext = strtolower(pathinfo($_FILES['file2']['name'], PATHINFO_EXTENSION));
+            $mime = mime_content_type($tmpName);
+
+            if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {  
                 if($ukuran2 < 150*MB){  
-                    $update = $subheaderCt->updateDataByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $nama2, $desc, $date, $id);
-                    if($update){
-                        move_uploaded_file($file_tmp2, 'assets/img/subheader/'.$nama2); 
-                        chmod('assets/img/subheader/'.$nama2, 0777);
-                        echo "<script type='text/javascript'>alert('Subheader Added Success');</script>";
-                    }else{
-                        echo "<script type='text/javascript'>alert('Subheader Added Failed. PDF exsist');</script>";
-                    }
+                    $newFilename = uniqid('Subheader_', true) . '.' . $ext;
+                    move_uploaded_file($tmpName, "assets/img/subheader/$newFilename");
+					chmod("assets/img/subheader/$newFilename", 0644); 
+                    $file = true;       
                 }else{
-                    echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    if ($ukuran2 >= 150 * MB) {
+                        logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for Subheader ID $id.");
+                        echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    }
+                }         
+            } else{
+                if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+                    logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for Subheader ID $id.");
                 }
-            }else{
-                echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
-            }
-        }else{
-            $update = $subheaderCt->updateDataWithoutFileByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $desc, $date, $id);
-            if($update){
-                echo "<script type='text/javascript'>alert('Subheader Update Success');</script>";
-            }else{
-                echo "<script type='text/javascript'>alert('Subheader Update Failed. PDF exsist');</script>";
+			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
             }
         }
+
+        if($file == true){ 
+            $update = $subheaderCt->updateDataByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $newFilename, $desc, $date, $id);
+        }else{
+            $update = $subheaderCt->updateDataWithoutFileByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $desc, $date, $id);
+        }
+        
+        if ($update) {
+            logActivity("UPDATE", "Subheader ID $id updated successfully" . ($file ? " with new file $newFilename." : " without file update."));
+            echo "<script type='text/javascript'>alert('Subheader Update Success');</script>";
+        } else {
+            logActivity("UPDATE_FAIL", "Failed to update Subheader ID $id. Possibly duplicate PDF.");
+            echo "<script type='text/javascript'>alert('Subheader Update Failed. PDF exsist');</script>";
+        } 
+
         echo "<script type='text/javascript'>window.location='subheader'</script>";
-    }
-}else{
-    echo "<script type='text/javascript'>window.location='index'</script>";
-}
+    }  
+} 
 ?>  
 
 <body class="hold-transition sidebar-mini">

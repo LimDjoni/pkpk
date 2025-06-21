@@ -1,28 +1,50 @@
 <?php 
 $title = "Edit Shareholder | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Our Business	.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id']; 
 	$decoded = $shareholder->getDataByUid($id);   
 	
-	if (isset($_POST['shareholder_name']) && isset($_POST['nama_pemegangsaham']) && isset($_POST['NOS']) && isset($_POST['percent']) && isset($_POST['addFH'])){   
-		$shareholder_name = $_POST['shareholder_name']; 
-		$nama_pemegangsaham = $_POST['nama_pemegangsaham'];
-		$NOS = $_POST['NOS'];
-		$percent = $_POST['percent']; 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shareholder_name']) && isset($_POST['nama_pemegangsaham']) && isset($_POST['NOS']) && isset($_POST['percent']) && isset($_POST['addFH'])){   
+		function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
+
+		$shareholder_name = clean_input($_POST['shareholder_name']);
+		$nama_pemegangsaham = clean_input($_POST['nama_pemegangsaham']); 
+		$NOS = (int) $_POST['NOS'];
+		$percent = (int) $_POST['percent']; 
 		
 		$update = $shareholder->updateDataByUID($shareholder_name, $nama_pemegangsaham, $NOS, $percent, $date, $id);
-		if($update){  
-			echo "<script type='text/javascript'>alert('Shareholder Update Success');</script>";
-		}else{
-			echo "<script type='text/javascript'>alert('Shareholder Update Failed. PDF exsist');</script>";
-		}	
+		if ($update) {
+			logActivity("UPDATE_SHAREHOLDER", "Shareholder ID $id updated successfully.");
+			echo "<script>alert('Shareholder Update Success');</script>";
+		} else {
+			logActivity("UPDATE_FAILED", "Failed to update Shareholder ID $id.");
+			echo "<script>alert('Shareholder Update Failed.');</script>";
+		}  	
 		echo "<script type='text/javascript'>window.location='shareholder'</script>";
 	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

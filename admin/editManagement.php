@@ -1,57 +1,85 @@
 <?php 
 $title = "Edit Management | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Management.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id'];
 	$decoded = $management->getDataByUid($id);   
 	
-	if(isset($_FILES['file2']) && isset($_POST['bocEng']) && isset($_POST['bocIndo']) && isset($_POST['bodEng']) && isset($_POST['bodIndo']) && isset($_POST['acEng']) && isset($_POST['acIndo']) && isset($_POST['csEng']) && isset($_POST['csIndo']) && isset($_POST['editRep'])){  
-		$bocEng = $_POST['bocEng'];
-		$bocIndo = $_POST['bocIndo'];
-		$bodEng = $_POST['bodEng'];
-		$bodIndo = $_POST['bodIndo'];
-		$acEng = $_POST['acEng'];
-		$acIndo = $_POST['acIndo'];
-		$csEng = $_POST['csEng'];
-		$csIndo = $_POST['csIndo']; 
+	if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file2']) && isset($_POST['bocEng']) && isset($_POST['bocIndo']) && isset($_POST['bodEng']) && isset($_POST['bodIndo']) && isset($_POST['acEng']) && isset($_POST['acIndo']) && isset($_POST['csEng']) && isset($_POST['csIndo']) && isset($_POST['editRep'])){  
+		$bocEng = trim($_POST['bocEng'] ?? ''); 
+		$bocIndo = trim($_POST['bocIndo'] ?? ''); 
+		$bodEng = trim($_POST['bodEng'] ?? ''); 
+		$bodIndo = trim($_POST['bodIndo'] ?? ''); 
+		$acEng = trim($_POST['acEng'] ?? ''); 
+		$acIndo = trim($_POST['acIndo'] ?? ''); 
+		$csEng = trim($_POST['csEng'] ?? ''); 
+		$csIndo = trim($_POST['csIndo'] ?? '');  
 
-		if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){
-			$ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
-			$nama2 = $_FILES['file2']['name'];
-			$y = explode('.', $nama2);
-			$ekstensi2 = strtolower(end($y));
-			$ukuran2 = $_FILES['file2']['size'];
-			$file_tmp2 = $_FILES['file2']['tmp_name'];
+		$file = false;       
+        if(isset($_FILES["file2"]) && !empty($_FILES["file2"]["name"])){ 
+            // Only allow PDFs by extension *and* MIME
+			$allowedExts = ['png', 'jpg', 'jpeg'];
+			$allowedMime = array('image/png', 'image/jpeg');
+            $tmpName = $_FILES['file2']['tmp_name'];
+		    $ukuran2 = $_FILES['file2']['size'];
+            $ext = strtolower(pathinfo($_FILES['file2']['name'], PATHINFO_EXTENSION));
+            $mime = mime_content_type($tmpName);
 
-			if(in_array($ekstensi2, $ekstensi_diperbolehkan2) === true){
-				if($ukuran2 < 150*MB){   
-					$update = $management->updateDataByUID($nama2, $bocEng, $bocIndo, $bodEng, $bodIndo, $acEng, $acIndo, $csEng, $csIndo, $date, $id);
-					if($update){ 
-						move_uploaded_file($file_tmp2, 'assets/img/management/'.$nama2); 
-						chmod('assets/img/management/'.$nama2, 0777);
-						echo "<script type='text/javascript'>alert('Management Update Success');</script>";
-					}else{
-						echo "<script type='text/javascript'>alert('Management Update Failed. PDF exsist');</script>";
-					}
-				}else{
-					echo "<script type='text/javascript'>alert('File Too Big');</script>";
-				}
-			}else{
-				echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
-			}
-		}else{
-			$update = $management->updateDataWithoutFileByUID($bocEng, $bocIndo, $bodEng, $bodIndo, $acEng, $acIndo, $csEng, $csIndo, $date, $id);
-			if($update){ 
-				echo "<script type='text/javascript'>alert('Management Update Success');</script>";
-			}else{
-				echo "<script type='text/javascript'>alert('Management Update Failed. PDF exsist');</script>";
-			}
-		}
-		echo "<script type='text/javascript'>window.location='management'</script>";
-	} 
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
+            if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime)) {  
+                if($ukuran2 < 150*MB){  
+                    $newFilename = uniqid('Management_', true) . '.' . $ext;
+                    move_uploaded_file($tmpName, "assets/img/management/$newFilename");
+					chmod("assets/img/management/$newFilename", 0644); 
+                    $file = true;       
+                }else{
+                    if ($ukuran2 >= 150 * MB) {
+                        logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for Management ID $id.");
+                        echo "<script type='text/javascript'>alert('File Too Big');</script>";
+                    }
+                }         
+            } else{
+                if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+                    logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for Management ID $id.");
+                }
+			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
+            }
+        }
+
+        if($file == true){ 
+            $update = $management->updateDataByUID($newFilename, $bocEng, $bocIndo, $bodEng, $bodIndo, $acEng, $acIndo, $csEng, $csIndo, $date, $id);
+        }else{
+            $update = $management->updateDataWithoutFileByUID($bocEng, $bocIndo, $bodEng, $bodIndo, $acEng, $acIndo, $csEng, $csIndo, $date, $id);
+        }
+        
+        if ($update) {
+            logActivity("UPDATE", "Management ID $id updated successfully" . ($file ? " with new file $newFilename." : " without file update."));
+            echo "<script type='text/javascript'>alert('Management Update Success');</script>";
+        } else {
+            logActivity("UPDATE_FAIL", "Failed to update Management ID $id. Possibly duplicate PDF.");
+            echo "<script type='text/javascript'>alert('Management Update Failed. PDF exsist');</script>";
+        } 
+
+        echo "<script type='text/javascript'>window.location='management'</script>";
+    }  
 }
 ?> 
 

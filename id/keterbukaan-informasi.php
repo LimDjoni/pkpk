@@ -59,28 +59,7 @@ $discTahun = $disclosure->getDataTahun();
 				</div>
 			</div>
 		</div>
-	</section>
-
-	<!-- Testimoial Section Begin -->
-	<!-- <section class="testimonial-section">
-		<div class="container">
-			<div class="row">
-				<div class="about-text">
-					<div class="section-title"> 
-                        <p>Our history of being involved in the coal industry can be traced back to around 2005 in South Kalimantan, Indonesia. Over the years, our business has evolved and today, we have established a reputation as a reliable coal trader and coal shipping company in Indonesia.
-
-						We procure thermal coal from coal mines located in South Kalimantan for domestic sales to mainly coal traders. We also provide chartering services of tugboats, barges and bulk carrier to transport coal within the Indonesian territories.
-
-						Led by an experienced management team, and with the depth and diversity of their technical and operational expertise, we are positioned to tap opportunities in Indonesia – one of the leading producers of coal globally.
-
-						With increases in Indonesia’s electrification and new coal-fired power plants across the Indonesian archipelago, demand for coal and inter-island transportation of coal is expected to remain robust, driving our growth.
-                        </p>
-                    </div>
-				</div>
-			</div>
-		</div>
-	</section> -->
-	<!-- Testimonial Section End -->
+	</section> 
 
 	<!-- Footer -->
 	<?php include 'include/footer.php' ?>
@@ -88,3 +67,78 @@ $discTahun = $disclosure->getDataTahun();
 </body>
 
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var totalPageDisclosure = parseInt($('#totalPagesDisclosure').val());   
+
+        var pag = $('#paginationDisclosure').simplePaginator({
+            totalPages: totalPageDisclosure,
+            maxButtonsVisible: 5,
+            currentPage: 1,
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            firstLabel: 'First',
+            lastLabel: 'Last',
+            clickCurrentPage: true,
+            pageChange: function(page) {    
+                $("#contentDisclosure").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+                $.ajax({
+                    url:"load_data_disclosure.php",
+                    method:"POST",
+                    dataType: "json",       
+                    data:{page: page, year:""},
+                    success:function(responseData){ 
+                        $('#contentDisclosure').html(responseData.html);
+                    } 
+                });
+            }       
+        });
+    });
+</script> 
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+	    $("#myInput5").on("change",function(){
+	    	var year = $(this).val(); 
+	        $.ajax({
+		        url :"total_data_disclosure.php",
+		        type:"POST",
+		        cache:false,
+		        data: 'year=' + year,
+		        success:function(response){  
+					var obj=$.parseJSON(response);   
+		        	$('#totalPagesDisclosure').val(obj.totalData);   
+
+			    	var totalPageDisclosure = parseInt($('#totalPagesDisclosure').val());   
+			      
+			        $('#paginationDisclosure').simplePaginator({
+			            totalPages: totalPageDisclosure,
+			            maxButtonsVisible: 5,
+			            currentPage: 1,
+			            nextLabel: 'Next',
+			            prevLabel: 'Prev',
+			            firstLabel: 'First',
+			            lastLabel: 'Last',
+			            clickCurrentPage: true,
+			            pageChange: function(page) {  
+			                $("#contentDisclosure").html('<tr><td colspan="6"><strong>loading...</strong></td></tr>');
+			                $.ajax({
+			                    url:"load_data_disclosure.php",
+			                    method:"POST",
+			                    dataType: "json",       
+			                    data:{page: page, year: year},
+			                    success:function(responseData){ 
+			                        $('#contentDisclosure').html(responseData.html);
+			                    },
+						        error: function(jqXHR, textStatus, errorThrown) {
+						           console.log(textStatus, errorThrown);
+						        }
+			                });
+			            }       
+			        });
+		        }
+			});
+	    }); 
+	});
+</script>   

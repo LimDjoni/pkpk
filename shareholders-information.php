@@ -42,7 +42,7 @@ $SH = $shareholder->getData();
 										<tr class="color" >  
 											<td scope="row" style="text-align: center;"><?php echo $no; ?></td>
 											<td><?php echo $SH[$j]['shareholder_name']; ?></td>
-											<td class="color"><?php echo number_format($SH[$j]['NOS'], 0, ',', '.');?></td>
+											<td class="color"><?php echo number_format((float)$SH[$j]['NOS'], 0, ',', '.');?></td>
 											<td class="color"><?php echo $SH[$j]['percent']; ?></td>
 										</tr> 
 										<?php $total = $total + $SH[$j]['NOS'];
@@ -50,7 +50,7 @@ $SH = $shareholder->getData();
 										$no++; }?>
 										<tr>
 											<th scope="col" colspan="2" style="text-align: center;">Total</th>
-											<th><?php echo number_format($total, 0, ',', '.'); ?></th>
+											<th><?php echo number_format((float)$total, 0, ',', '.'); ?></th>
 											<th><?php echo $totalP; ?></th>
 										</tr>
 									</tbody>

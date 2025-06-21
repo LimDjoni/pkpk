@@ -184,23 +184,6 @@ function createCookie(name, value, days) {
 
 </script>
 
-<script type="text/javascript">
-  $(document).ready(function(){ 
-    $("#divisionCB").on("change",function(){
-      var DivisionID = $(this).val(); 
-      $.ajax({
-        url :"getDepartment.php",
-        type:"POST",
-        cache:false,
-        data: 'DivisionID=' + DivisionID,
-        success:function(response){  
-          $('#DepartmentCB').html(response); 
-        }
-      });
-    }); 
-  });
-</script>
-
 <script>
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
@@ -218,92 +201,4 @@ var getUrlParameter = function getUrlParameter(sParam) {
     return false;
 };
 </script> 
-
-<script type="text/javascript">
-  $(document).ready(function(){  
-    var id = getUrlParameter('id');  
-    if(!id){
-    }
-    else{  
-      $.ajax({
-        url :"getDepartmentEdt.php",
-        type:"POST",
-        cache:false,
-        data: 'id=' + id,
-        success:function(response){    
-          $('#DepartmentCBEdt').html(response); 
-        }
-      });
-    }
-  });
-</script>
-
-<script type="text/javascript">
-  $(document).ready(function(){ 
-    $("#divisionCBEdt").on("change",function(){
-      var DivisionID = $(this).val(); 
-      $.ajax({
-        url :"getDepartmentEdt2.php",
-        type:"POST",
-        cache:false,
-        data: 'DivisionID=' + DivisionID,
-        success:function(response){  
-          $('#DepartmentCBEdt').html(response); 
-        }
-      });
-    }); 
-  });
-</script>
-
-<script type="text/javascript">
-  $(document).ready(function(){ 
-    $("#DepartmentCB").on("change",function(){
-      var DepartmentID = $(this).val(); 
-      $.ajax({
-        url :"getSection.php",
-        type:"POST",
-        cache:false,
-        data: 'DepartmentID=' + DepartmentID,
-        success:function(response){  
-          $('#SectionCB').html(response); 
-        }
-      });
-    }); 
-  });
-</script>
-
-<script type="text/javascript">
-  $(document).ready(function(){  
-    var id = getUrlParameter('id');  
-    if(!id){
-    }
-    else{  
-      $.ajax({
-        url :"getSectionEdt.php",
-        type:"POST",
-        cache:false,
-        data: 'id=' + id,
-        success:function(response){    
-          $('#SectionCBEdt').html(response); 
-        }
-      });
-    }
-  });
-</script>
  
-<script type="text/javascript">
-  $(document).ready(function(){ 
-    $("#DepartmentCBEdt").on("change",function(){
-      var DepartmentID = $(this).val(); 
-      $.ajax({
-        url :"getSectionEdt2.php",
-        type:"POST",
-        cache:false,
-        data: 'DepartmentID=' + DepartmentID,
-        success:function(response){  
-          $('#SectionCBEdt').html(response);   
-        }
-      });
-    }); 
-  });
-</script>

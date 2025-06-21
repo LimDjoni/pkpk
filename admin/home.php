@@ -1,49 +1,77 @@
 <?php 
 $title = "Home | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Add Home.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else { 
 	$decoded = $home->getData();  
 	
-	if (isset($_FILES['file']) && isset($_FILES['file2']) && isset($_POST['position']) && isset($_POST['addFH'])){  
-		$position =  $_POST['position'];
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file']) && isset($_FILES['file2']) && isset($_POST['position']) && isset($_POST['addFH'])){  
+		$position =  (int) $_POST['position'];
 
-		$ekstensi_diperbolehkan2 = array('jpg', 'png', 'jpeg');
+		$allowedExts = ['png', 'jpg', 'jpeg'];
+		$allowedMime = array('image/png', 'image/jpeg');
+		$mime        = mime_content_type($_FILES['file2']['tmp_name']);
+    	$max_size = 150 * 1024 * 1024; // 150MB in bytes
+		
+		// === File 1 ===
 		$nama = $_FILES['file']['name'];
-		$y = explode('.', $nama);
-		$ekstensi = strtolower(end($y));
-		$ukuran = $_FILES['file']['size'];
-		$file_tmp = $_FILES['file']['tmp_name'];
+		$tmp1 = $_FILES['file']['tmp_name'];
+		$size1 = $_FILES['file']['size'];
+		$ext1 = strtolower(pathinfo($nama, PATHINFO_EXTENSION));
 
+		// === File 2 ===
 		$nama2 = $_FILES['file2']['name'];
-		$z = explode('.', $nama2);
-		$ekstensi2 = strtolower(end($z));
-		$ukuran2 = $_FILES['file2']['size'];
-		$file_tmp2 = $_FILES['file2']['tmp_name'];
+		$tmp2 = $_FILES['file2']['tmp_name'];
+		$size2 = $_FILES['file2']['size'];
+		$ext2 = strtolower(pathinfo($nama2, PATHINFO_EXTENSION));
 
-		if((in_array($ekstensi, $ekstensi_diperbolehkan2) === true) && (in_array($ekstensi2, $ekstensi_diperbolehkan2) === true)){ 
-			if(($ukuran < 150*MB) && ($ukuran2 < 150*MB)){   
-				$add = $home->addReport($nama, $nama2, $position, $date);
-				if($add){  
-					move_uploaded_file($file_tmp, 'assets/img/home/'.$nama); 
-					move_uploaded_file($file_tmp2, 'assets/img/home/id/'.$nama2); 
-					chmod('assets/img/home/'.$nama, 0777);
-					chmod('assets/img/home/id/'.$nama2, 0777);
-					echo "<script type='text/javascript'>alert('Home Added Success');</script>"; 
+		if (in_array($ext1, $allowedExts) && in_array($ext2, $allowedExts) && in_array($mime, $allowedMime)) {
+        	if ($size1 < $max_size && $size2 < $max_size) {
+				// Use unique names to prevent overwrites or injection via name
+				$newFilename1 = uniqid('Home_EN_', true) . '.' . $ext1;
+				$newFilename2 = uniqid('Home_IN_', true) . '.' . $ext2; 
+
+				$dir1 = 'assets/img/home/' . $newFilename1;
+				$dir2 = 'assets/img/home/id/' . $newFilename2;
+
+				$add = $home->addReport($newFilename1, $newFilename2, $position, $date);
+				if ($add) {
+					move_uploaded_file($tmp1, $dir1);
+					move_uploaded_file($tmp2, $dir2);
+					chmod($dir1, 0644);
+					chmod($dir2, 0644);
+					logActivity("HOME_ADD_SUCCESS", "Home added: $newFilename1 and $newFilename2 by {$_SESSION['username']}");
+					echo "<script type='text/javascript'>alert('Home Added Success');</script>";
 				}else{
-					echo "<script type='text/javascript'>alert('Home Added Failed. PDF exsist');</script>";
+					logActivity("HOME_ADD_FAILED", "Duplicate or DB error on add.");
+					echo "<script type='text/javascript'>alert('Home Added Failed. img exsist');</script>";
 				}
 			}else{
+				logActivity("FILE_TOO_LARGE", "Attempted to upload a too-large file for Home ID $id.");
 				echo "<script type='text/javascript'>alert('File Too Big');</script>";
 			}
 		}else{
+			if (in_array($ext1, $allowedExts) && in_array($ext2, $allowedExts) && in_array($mime, $allowedMime)) {
+				logActivity("INVALID_FILE", "Attempted upload with invalid file type or MIME for Home ID $id.");
+			}
 			echo "<script type='text/javascript'>alert('Extension Is Not Allowed');</script>";
 		}
 		echo "<script type='text/javascript'>window.location='home'</script>";
-	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+	}  	
+}  
 ?> 
 
 <body class="hold-transition sidebar-mini">
@@ -91,20 +119,20 @@ if($_SESSION['login'] == true) {
 											<label for="exampleInputEmail1">English</label>
 											<div class="form-group">
 												<label for="exampleInputEmail1">English Image</label>
-												<input type="file" id="file" name="file">
+												<input type="file" id="file" name="file" required>
 											</div>
 										</div>
 										<div class="card-body col-md-6">
 											<label for="exampleInputEmail1">Indonesia</label>
 											<div class="form-group">
 												<label for="exampleInputEmail1">Indonesia Image</label>
-												<input type="file" id="file2" name="file2">
+												<input type="file" id="file2" name="file2" required>
 											</div>
 										</div>
 										<div class="card-body col-md-12">
 											<div class="form-group"> 
 												<label for="exampleInputEmail1">Position</label>
-												<input type="number" name="position" class="form-control" id="exampleInputOSName" placeholder="Enter Position">
+												<input type="number" name="position" class="form-control" id="exampleInputOSName" placeholder="Enter Position" required>
 											</div>
 										</div>
 									</div>

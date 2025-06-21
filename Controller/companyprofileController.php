@@ -1,71 +1,74 @@
 <?php
+include_once 'config.php';
+
 class companyprofileController{
 	protected $conn;
-
+ 
 	// public function __construct(){
 	// 	$this->conn = mysqli_connect("192.168.100.88", "deli", "Deli123", "website", "3306"); //(host, username, password, database, port)
 	// }
 
+	// public function __construct(){
+	// 	$this->conn = mysqli_connect("localhost", "pkpktbk1_pkpk", "Pkpk_1234!", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
+	// }
+
 	public function __construct(){
-		$this->conn = mysqli_connect("localhost", "pkpktbk1_pkpk", "Pkpk_1234!", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
+		$this->conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+
+		if (!$this->conn) {
+			die("Database connection failed: " . mysqli_connect_error());
+		}
+
+		// Set charset to UTF-8 for safety
+		mysqli_set_charset($this->conn, "utf8mb4");
 	}
 
-	public function getData(){
-		$query = mysqli_query($this->conn,"SELECT * FROM company_profile WHERE delete_date IS NULL ORDER BY created_date DESC;");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
+	public function getData() {
+		$query = mysqli_query($this->conn, "SELECT * FROM company_profile WHERE delete_date IS NULL ORDER BY created_date DESC;");
+		
+		$data = []; // Always initialize as array
+
+		if ($query && mysqli_num_rows($query) > 0) {
+			while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+				$data[] = $row;
 			}
 		}
+
 		return $data;
 	}
 
-	public function getDataByUid($uID){
-		$query = mysqli_query($this->conn,"SELECT * FROM company_profile WHERE ID_CP='$uID'");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
+	public function getDataByUid($uID) {
+		$data = [];
+		$stmt = mysqli_prepare($this->conn, "SELECT * FROM company_profile WHERE ID_CP = ?");
+		mysqli_stmt_bind_param($stmt, "i", $uID);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+			$data[] = $row;
 		}
+
 		return $data;
 	}
-	
-	public function addReport($bodyeng, $bodyindo, $createddate){
-		$BodyEng = mysqli_real_escape_string($this->conn,$bodyeng); 
-		$BodyInd = mysqli_real_escape_string($this->conn,$bodyindo); 
-		$query="INSERT INTO company_profile(body_eng, body_indo, created_date) VALUES ('$BodyEng', '$BodyInd', '$createddate')";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-		return $result; 
-	}
 
-	public function updateDataByUID($bodyeng, $bodyindo, $updatedate, $uID){
-		$BodyEng = mysqli_real_escape_string($this->conn,$bodyeng); 
-		$BodyInd = mysqli_real_escape_string($this->conn,$bodyindo);
-		$query = "UPDATE company_profile SET body_eng = '$BodyEng', body_indo = '$BodyInd', update_date = '$updatedate' WHERE ID_CP = '$uID'";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
+	public function updateDataByUID($bodyeng, $bodyindo, $updatedate, $uID) {
+		$stmt = $this->conn->prepare("UPDATE company_profile SET body_eng = ?, body_indo = ?, update_date = ? WHERE ID_CP = ?");
+
+		if (!$stmt) {
+			die("Prepare failed: " . $this->conn->error);
+		}
+
+		$stmt->bind_param("sssi", $bodyeng, $bodyindo, $updatedate, $uID);
+
+		$result = $stmt->execute();
+
+		if (!$result) {
+			die("Execute failed: " . $stmt->error);
+		}
+
+		$stmt->close();
 		return $result;
-	}  
-
-	public function deleteReport($deletedate, $IDReport){
-		$query = "SELECT * FROM company_profile WHERE ID='$IDReport'";
-            //checking if the data is available in db
-		$result = mysqli_query($this->conn,$query);
-		$count_row = $result->num_rows;
-		if ($count_row == 1){
-			$query = "UPDATE company_profile SET delete_date = '$deletedate' WHERE ID_CP='$IDReport'";
-			$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-			return $result; 
-		}
-		else { 
-			return false;
-		}
-	}
+	} 
 }
 ?>
 

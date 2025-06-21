@@ -1,40 +1,58 @@
 <?php 
 $title = "Edit Good Corporate Governance | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Good Corporate Governance.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else {
+	$id = (int) $_GET['id'];
 	$decoded = $gcg->getDataByUid($id);   
 	
-	if(isset($_POST['OverviewEng']) && isset($_POST['OverviewInd']) && isset($_POST['RaNEng']) && isset($_POST['RaNInd']) && isset($_POST['IAEng']) && isset($_POST['IAInd']) && isset($_POST['ICEng']) && isset($_POST['ICInd']) && isset($_POST['RMEng']) && isset($_POST['RMInd']) && isset($_POST['COCEng']) && isset($_POST['COCInd']) && isset($_POST['WhistleEng']) && isset($_POST['WhistleInd']) && isset($_POST['IaDEng']) && isset($_POST['IaDInd']) && isset($_POST['editRep'])){  
-		$OverviewEng = $_POST['OverviewEng']; 
-		$OverviewInd = $_POST['OverviewInd']; 
-		$RaNEng = $_POST['RaNEng']; 
-		$RaNInd = $_POST['RaNInd'];
-		$IAEng = $_POST['IAEng'];
-		$IAInd = $_POST['IAInd'];
-		$ICEng = $_POST['ICEng'];
-		$ICInd = $_POST['ICInd'];
-		$RMEng = $_POST['RMEng'];
-		$RMInd = $_POST['RMInd']; 
-		$COCEng = $_POST['COCEng']; 
-		$COCInd = $_POST['COCInd']; 
-		$WhistleEng = $_POST['WhistleEng']; 
-		$WhistleInd = $_POST['WhistleInd']; 
-		$IaDEng = $_POST['IaDEng']; 
-		$IaDInd = $_POST['IaDInd'];  
+	if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['OverviewEng']) && isset($_POST['OverviewInd']) && isset($_POST['RaNEng']) && isset($_POST['RaNInd']) && isset($_POST['IAEng']) && isset($_POST['IAInd']) && isset($_POST['ICEng']) && isset($_POST['ICInd']) && isset($_POST['RMEng']) && isset($_POST['RMInd']) && isset($_POST['COCEng']) && isset($_POST['COCInd']) && isset($_POST['WhistleEng']) && isset($_POST['WhistleInd']) && isset($_POST['IaDEng']) && isset($_POST['IaDInd']) && isset($_POST['editRep'])){  
+		$OverviewEng = trim($_POST['OverviewEng'] ?? ''); 
+		$OverviewInd = trim($_POST['OverviewInd'] ?? ''); 
+		$RaNEng = trim($_POST['RaNEng'] ?? ''); 
+		$RaNInd = trim($_POST['RaNInd'] ?? '');
+		$IAEng = trim($_POST['IAEng'] ?? '');
+		$IAInd = trim($_POST['IAInd'] ?? '');
+		$ICEng = trim($_POST['ICEng'] ?? '');
+		$ICInd = trim($_POST['ICInd'] ?? '');
+		$RMEng = trim($_POST['RMEng'] ?? '');
+		$RMInd = trim($_POST['RMInd'] ?? ''); 
+		$COCEng = trim($_POST['COCEng'] ?? ''); 
+		$COCInd = trim($_POST['COCInd'] ?? ''); 
+		$WhistleEng = trim($_POST['WhistleEng'] ?? ''); 
+		$WhistleInd = trim($_POST['WhistleInd'] ?? ''); 
+		$IaDEng = trim($_POST['IaDEng'] ?? ''); 
+		$IaDInd = trim($_POST['IaDInd'] ?? '');  
 		
 		$update = $gcg->updateDataByUID($OverviewEng, $OverviewInd, $RaNEng, $RaNInd, $IAEng, $IAInd, $ICEng, $ICInd, $RMEng, $RMInd, $COCEng, $COCInd, $WhistleEng, $WhistleInd, $IaDEng, $IaDInd, $date, $id);
-		if($update){  
-			echo "<script type='text/javascript'>alert('Good Corporate Governance Update Success');</script>";
-		}else{
-			echo "<script type='text/javascript'>alert('Good Corporate Governance Update Failed. PDF exsist');</script>";
-		}	
+		if ($update) {
+			logActivity("UPDATE_GCG", "Good Corporate Governance ID $id updated successfully.");
+			echo "<script>alert('Good Corporate Governance Update Success');</script>";
+		} else {
+			logActivity("UPDATE_FAILED", "Failed to update Good Corporate Governance ID $id.");
+			echo "<script>alert('Good Corporate Governance Update Failed.');</script>";
+		}  
 		echo "<script type='text/javascript'>window.location='gcg'</script>";
 	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
-}
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

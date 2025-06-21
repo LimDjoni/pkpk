@@ -1,31 +1,53 @@
 <?php 
 $title = "Edit Vission Mission | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$id = $_GET['id'];
+// Validate ID
+if (!isset($_GET['id'])) {
+    logActivity("MISSING_ID", "Missing 'id' in GET request.");
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!is_numeric($_GET['id'])) {
+    logActivity("INVALID_ID", "Invalid 'id' value in GET request: " . $_GET['id']);
+    http_response_code(400);
+    exit('Invalid ID');
+}
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to Edit Vision Mission.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}else { 
+	$id = (int) $_GET['id'];
 	$decoded = $vissionmission->getDataByUid($id);   
 	
-	if (isset($_POST['vission']) && isset($_POST['visi']) && isset($_POST['mission']) && isset($_POST['misi']) && isset($_POST['motto']) && isset($_POST['moto']) && isset($_POST['phylosophy']) && isset($_POST['filosofi']) && isset($_POST['addFH'])){   
-		$Vission = $_POST['vission']; 
-		$Visi = $_POST['visi'];
-		$Mission = $_POST['mission'];
-		$Misi = $_POST['misi'];
-		$Motto = $_POST['motto'];
-		$Moto = $_POST['moto'];
-		$Phylosophy = $_POST['phylosophy'];
-		$Filosofi = $_POST['filosofi']; 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vission']) && isset($_POST['visi']) && isset($_POST['mission']) && isset($_POST['misi']) && isset($_POST['motto']) && isset($_POST['moto']) && isset($_POST['phylosophy']) && isset($_POST['filosofi']) && isset($_POST['addFH'])){   
+		function clean_input($data) {
+			return htmlspecialchars(strip_tags(trim($data)));
+		}
+
+		$Vission = clean_input($_POST['vission']);
+		$Visi = clean_input($_POST['visi']);
+		$Mission = clean_input($_POST['mission']);
+		$Misi = clean_input($_POST['misi']);
+		$Motto = clean_input($_POST['motto']);
+		$Phylosophy = clean_input($_POST['phylosophy']);
+		$Filosofi = clean_input($_POST['filosofi']); 
 		
 		$update = $vissionmission->updateDataByUID($Vission, $Visi, $Mission, $Misi, $Motto, $Moto, $Phylosophy, $Filosofi, $date, $id);
-		if($update){  
-			echo "<script type='text/javascript'>alert('Vission Mission Update Success');</script>";
-		}else{
-			echo "<script type='text/javascript'>alert('Vission Mission Update Failed. PDF exsist');</script>";
-		}	
+		if ($update) {
+			logActivity("UPDATE_VISION_MISSION", "Vision Mision ID $id updated successfully.");
+			echo "<script>alert('Vision Mision Update Success');</script>";
+		} else {
+			logActivity("UPDATE_FAILED", "Failed to update Vision Mision ID $id.");
+			echo "<script>alert('Vision Mision Update Failed.');</script>";
+		}  	
+		 
 		echo "<script type='text/javascript'>window.location='vission-mission'</script>";
 	}
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
 }
 ?> 
 

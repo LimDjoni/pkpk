@@ -29,8 +29,9 @@ $totalP = 0;
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="robots" content="noindex, nofollow">
-    <title><?php echo $title; ?></title>
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="PKPK, profil, perusahaan, tambang, laporan, saham">
+    <title><?php echo isset($title) ? $title : "PKPK"; ?></title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logoaj.png" /> 
 
     <!-- Google Font -->
@@ -41,7 +42,6 @@ $totalP = 0;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.20/dist/css/uikit.min.css" />
     <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="../css/elegant-icons.css" type="text/css"> 
     <link rel="stylesheet" href="../css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../css/slicknav.min.css" type="text/css">

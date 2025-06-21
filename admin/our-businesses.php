@@ -1,31 +1,23 @@
 <?php 
 $title = "Our Businesses | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
+include_once 'include/logActivity.php'; // Add logging
 
-if($_SESSION['login'] == true) {
-	$decoded = $ourBusinesses->getData();  
-	
-	// if (isset($_POST['Mining']) && isset($_POST['Tambang']) && isset($_POST['Equipment']) && isset($_POST['Perlengkapan']) && isset($_POST['Land']) && isset($_POST['Lahan']) && isset($_POST['Construction']) && isset($_POST['Konstruksi']) && isset($_POST['addFH'])){   
-	// 	$Mining = $_POST['Mining']; 
-	// 	$Tambang = $_POST['Tambang'];
-	// 	$Equipment = $_POST['Equipment'];
-	// 	$Perlengkapan = $_POST['Perlengkapan'];
-	// 	$Land = $_POST['Land'];
-	// 	$Lahan = $_POST['Lahan'];
-	// 	$Construction = $_POST['Construction'];
-	// 	$Konstruksi = $_POST['Konstruksi']; 
-
-	// 	$add = $ourBusinesses->addReport($Mining, $Tambang, $Equipment, $Perlengkapan, $Land, $Lahan, $Construction, $Konstruksi, $date);
-	// 	if($add){ 
-	// 		echo "<script type='text/javascript'>alert('Our Businesses Added Success');</script>";
-	// 	}else{
-	// 		echo "<script type='text/javascript'>alert('Our Businesses Added Failed. PDF exsist');</script>";
-	// 	}
-	// 	echo "<script type='text/javascript'>window.location='our-businesses'</script>";
-	// } 
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
+//Validate CSRF token (optional but recommended)
+if (!isset($_SESSION['csrf_token'])) {
+	logActivity("CSRF_MISSING", "CSRF token missing in session.");
+   	http_response_code(403);
+   	exit('Invalid CSRF token.');
 }
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to View Our Business.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+}
+else {
+	$decoded = $ourBusinesses->getData();  
+} 
 ?> 
 
 <body class="hold-transition sidebar-mini">

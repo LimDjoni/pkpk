@@ -6,110 +6,223 @@ class subheaderController{
 	// 	$this->conn = mysqli_connect("192.168.100.88", "deli", "Deli123", "website", "3306"); //(host, username, password, database, port)
 	// }
 
+	// public function __construct(){
+	// 	$this->conn = mysqli_connect("localhost", "pkpktbk1_pkpk", "Pkpk_1234!", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
+	// }
+
 	public function __construct(){
-		$this->conn = mysqli_connect("localhost", "pkpktbk1_pkpk", "Pkpk_1234!", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
-	}
+		$this->conn = mysqli_connect("localhost", "root", "", "pkpktbk1_website", "3306"); //(host, username, password, database, port)
+	} 
 
 	public function getData(){
-		$query = mysqli_query($this->conn,"SELECT * FROM subheader WHERE delete_date IS NULL ORDER BY created_date DESC;");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
-		}
-		return $data;
-	}
+		$data = [];
 
-	public function getDataByUid($uID){
-		$query = mysqli_query($this->conn,"SELECT * FROM subheader WHERE ID='$uID'");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
+		$stmt = $this->conn->prepare("SELECT * FROM subheader WHERE delete_date IS NULL ORDER BY created_date DESC");
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
+			return $data;
 		}
-		return $data;
-	}
 
-	public function getExcDataDivision($idSubHeader){
-		$query = mysqli_query($this->conn,"SELECT * FROM subheader WHERE ID!='$idSubHeader'");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
-		}
-		return $data;
-	}
+		$stmt->execute();
+		$result = $stmt->get_result();
 
-	public function getDataByPageEnglish($page){
-		$query = mysqli_query($this->conn,"SELECT * FROM subheader WHERE pageEng='$page'");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
+		while ($row = $result->fetch_assoc()) {
+			$data[] = $row;
 		}
-		return $data;
-	}
 
-	public function getDataByPageIndonesia($page){
-		$query = mysqli_query($this->conn,"SELECT * FROM subheader WHERE pageInd='$page'");
-		$jumdata= mysqli_num_rows($query);
-		if($jumdata==0){
-			$data="-";
-		} else{
-			while($row = mysqli_fetch_array($query)){
-				$data[]=$row;
-			}
-		}
+		$stmt->close();
 		return $data;
-	}
+	}    
+
+	public function getDataByUid($uID) {
+		$data = [];
+
+		$stmt = $this->conn->prepare("SELECT * FROM subheader WHERE ID = ?");
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
+			return $data;
+		}
+
+		$stmt->bind_param("i", $uID);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		while ($row = $result->fetch_assoc()) {
+			$data[] = $row;
+		}
+
+		$stmt->close();
+		return $data;
+	}     
+
+	public function getExcDataDivision($idSubHeader) {
+		$data = [];
+
+		$stmt = $this->conn->prepare("SELECT * FROM subheader WHERE ID != ?");
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
+			return "-";
+		}
+
+		$stmt->bind_param("i", $idSubHeader); // "i" for integer
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if ($result->num_rows === 0) {
+			return "-";
+		}
+
+		while ($row = $result->fetch_assoc()) {
+			$data[] = $row;
+		}
+
+		$stmt->close();
+		return $data;
+	} 
+
+	public function getDataByPageEnglish($page) {
+		$data = [];
+
+		$stmt = $this->conn->prepare("SELECT * FROM subheader WHERE pageEng = ?");
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
+			return "-";
+		}
+
+		$stmt->bind_param("s", $page); // "s" = string
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if ($result->num_rows === 0) {
+			return "-";
+		}
+
+		while ($row = $result->fetch_assoc()) {
+			$data[] = $row;
+		}
+
+		$stmt->close();
+		return $data;
+	} 
+
+	public function getDataByPageIndonesia($page) {
+		$data = [];
+
+		$stmt = $this->conn->prepare("SELECT * FROM subheader WHERE pageInd = ?");
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
+			return "-";
+		}
+
+		$stmt->bind_param("s", $page); // "s" = string
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if ($result->num_rows === 0) {
+			return "-";
+		}
+
+		while ($row = $result->fetch_assoc()) {
+			$data[] = $row;
+		}
+
+		$stmt->close();
+		return $data;
+	} 
 	
-	public function addReport($pageInd, $pageEng, $PageNameInd, $PageNameEng, $subheader, $desc, $createddate){
-		$Desc = mysqli_real_escape_string($this->conn,$desc);  
-		$query="INSERT INTO subheader(pageInd, pageEng, PageNameInd, PageNameEng, sub_header, description, created_date) VALUES ('$pageInd' ,'$pageEng', '$PageNameInd' ,'$PageNameEng', '$subheader', '$Desc', '$createddate')";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-		return $result; 
-	}
+	public function addReport($pageInd, $pageEng, $PageNameInd, $PageNameEng, $subheader, $desc, $createddate) {
+		$dataInserted = false;
 
-	public function updateDataByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $subheader, $desc, $updatedate, $uID){
-		$Desc = mysqli_real_escape_string($this->conn,$desc);  
-		$query = "UPDATE subheader SET pageInd = '$pageInd', pageEng = '$pageEng', PageNameInd = '$PageNameInd', PageNameEng = '$PageNameEng', sub_header = '$subheader', description = '$Desc', update_date = '$updatedate' WHERE ID = '$uID'";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
+		$query = "INSERT INTO subheader (pageInd, pageEng, PageNameInd, PageNameEng, sub_header, description, created_date) 
+				VALUES (?, ?, ?, ?, ?, ?, ?)";
+		
+		$stmt = $this->conn->prepare($query);
+		
+		if ($stmt) {
+			$stmt->bind_param("sssssss", $pageInd, $pageEng, $PageNameInd, $PageNameEng, $subheader, $desc, $createddate);
+			$dataInserted = $stmt->execute();
+			$stmt->close();
+		} else {
+			error_log("Prepare failed: " . $this->conn->error);
+		}
+
+		return $dataInserted;
+	} 
+
+	public function updateDataByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $subheader, $desc, $updatedate, $uID) {
+		$query = "UPDATE subheader 
+				SET pageInd = ?, pageEng = ?, PageNameInd = ?, PageNameEng = ?, sub_header = ?, description = ?, update_date = ? 
+				WHERE ID = ?";
+
+		$stmt = $this->conn->prepare($query);
+		
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
+			return false;
+		}
+
+		$stmt->bind_param("sssssssi", $pageInd, $pageEng, $PageNameInd, $PageNameEng, $subheader, $desc, $updatedate, $uID);
+		$result = $stmt->execute();
+		$stmt->close();
+
 		return $result;
 	} 
 	
-	public function updateDataWithoutFileByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $desc, $updatedate, $uID){
-		$Desc = mysqli_real_escape_string($this->conn,$desc);  
-		$query = "UPDATE subheader SET pageInd = '$pageInd', pageEng = '$pageEng', PageNameInd = '$PageNameInd', PageNameEng = '$PageNameEng', description = '$Desc', update_date = '$updatedate' WHERE ID = '$uID'";
-		$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-		return $result;
-	}
+	public function updateDataWithoutFileByUID($pageInd, $pageEng, $PageNameInd, $PageNameEng, $desc, $updatedate, $uID) {
+		$query = "UPDATE subheader 
+				SET pageInd = ?, pageEng = ?, PageNameInd = ?, PageNameEng = ?, description = ?, update_date = ? 
+				WHERE ID = ?";
 
-	public function deleteReport($deletedate, $IDReport){
-		$query = "SELECT * FROM subheader WHERE ID='$IDReport'";
-            //checking if the data is available in db
-		$result = mysqli_query($this->conn,$query);
-		$count_row = $result->num_rows;
-		if ($count_row == 1){
-			$query = "UPDATE subheader SET delete_date = '$deletedate' WHERE ID='$IDReport'";
-			$result = mysqli_query($this->conn,$query) or die(mysqli_connect_errno()."Data cannot inserted");
-			return $result; 
-		}
-		else { 
+		$stmt = $this->conn->prepare($query);
+
+		if (!$stmt) {
+			error_log("Prepare failed: " . $this->conn->error);
 			return false;
 		}
-	}
+
+		$stmt->bind_param("ssssssi", $pageInd, $pageEng, $PageNameInd, $PageNameEng, $desc, $updatedate, $uID);
+		$result = $stmt->execute();
+		$stmt->close();
+
+		return $result;
+	} 
+
+	public function deleteReport($deletedate, $IDReport) {
+		// Check if the record exists
+		$checkQuery = "SELECT 1 FROM subheader WHERE ID = ?";
+		$checkStmt = $this->conn->prepare($checkQuery);
+
+		if (!$checkStmt) {
+			error_log("Prepare failed (check): " . $this->conn->error);
+			return false;
+		}
+
+		$checkStmt->bind_param("i", $IDReport);
+		$checkStmt->execute();
+		$checkStmt->store_result();
+
+		if ($checkStmt->num_rows === 1) {
+			$checkStmt->close();
+
+			// Update the delete_date
+			$updateQuery = "UPDATE subheader SET delete_date = ? WHERE ID = ?";
+			$updateStmt = $this->conn->prepare($updateQuery);
+
+			if (!$updateStmt) {
+				error_log("Prepare failed (update): " . $this->conn->error);
+				return false;
+			}
+
+			$updateStmt->bind_param("si", $deletedate, $IDReport);
+			$result = $updateStmt->execute();
+			$updateStmt->close();
+
+			return $result;
+		} else {
+			$checkStmt->close();
+			return false;
+		}
+	} 
 }
 ?>
 

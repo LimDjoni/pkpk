@@ -2,23 +2,12 @@
 $title = "Company Profile | Perdana Karya Perkasa, Tbk"; 
 include 'include/header.php';
 
-if($_SESSION['login'] == true) {
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    logActivity("UNAUTHORIZED", "Unauthorized access attempt to View Company Profile.");
+    echo "<script type='text/javascript'>window.location='index'</script>";
+    exit;
+} else{
 	$decoded = $companyprofile->getData();   
-	
-	// if (isset($_POST['desc']) && isset($_POST['desc2']) && isset($_POST['addFH'])){   
-	// 	$BodyEng = $_POST['desc']; 
-	// 	$BodyInd = $_POST['desc2']; 
- 
-	// 	$add = $companyprofile->addReport($BodyEng, $BodyInd, $date);
-	// 	if($add){ 
-	// 		echo "<script type='text/javascript'>alert('Company Profile Added Success');</script>";
-	// 	}else{
-	// 		echo "<script type='text/javascript'>alert('Company Profile Added Failed. PDF exsist');</script>";
-	// 	}
-	// 	echo "<script type='text/javascript'>window.location='company-profile'</script>";
-	// }
-}else{
-	echo "<script type='text/javascript'>window.location='index'</script>";
 }
 ?> 
 
@@ -51,54 +40,6 @@ if($_SESSION['login'] == true) {
 					</div>
 				</div><!-- /.container-fluid -->
 			</section>
-
-			<!-- Main content -->
-			<!-- <section class="content">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-8">
-							<div class="card card-primary">
-								<div class="card-header">
-									<h3 class="card-title">Create New Data</h3>
-								</div>
-								<form action="" method="POST" enctype="multipart/form-data">
-									<div class="row"> 
-										<div class="card-body col-md-6">
-											<label for="exampleInputEmail1">English</label>
-											<div class="form-group">
-												<label for="exampleInputEmail1">Body</label>
-												<textarea id="Remark" name="desc" class="form-control" rows="4" cols="50" placeholder="Enter Body in English"></textarea> 
-											</div> 
-										</div> 
-										<div class="card-body col-md-6"> 
-											<label for="exampleInputEmail1">Indonesia</label> 
-											<div class="form-group">
-												<label for="exampleInputEmail1">Body</label>
-												<textarea id="Remark" name="desc2" class="form-control" rows="4" cols="50" placeholder="Enter Body in Indonesia"></textarea> 
-											</div>
-										</div>
-									</div>
-									<div class="card-footer">
-										<button type="submit" name="addFH" class="btn btn-primary">Submit</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section> -->
-			<!-- /.content -->
-
-			<!-- Content Header (Page header) -->
-			<!-- <section class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1>Data Company Profile</h1>
-						</div>
-					</div>
-				</div>
-			</section> -->
 
 			<!-- Main content -->
 			<section class="content">
@@ -136,7 +77,6 @@ if($_SESSION['login'] == true) {
 													<td style="white-space: pre-line;"><?php echo $decoded[$x]['body_indo']; ?></td>   
 													<td>
 														<a href="editCompanyProfile?id=<?php echo $decoded[$x]['ID_CP']; ?>" name="edit" class="btn btn-primary">Edit</a> 
-														<!-- <a href="#myModal" class="btn btn-danger" data-href="deletecompanyprofile?id=<?php echo $decoded[$x]['ID']; ?>" data-toggle="modal" data-target="#myModal">Delete</a>  -->
 													</td>
 												</tr>
 												<?php $no++; }
