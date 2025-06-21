@@ -1,8 +1,8 @@
 <?php
-define("DB_HOST", "localhost");
-define("DB_USER", "root");
-define("DB_PASS", "");
-define("DB_NAME", "pkpktbk1_website");
-define("DB_PORT", "3306");
-define("PASSWORD_EMAIL", "4aTHV*52");
-?>
+    define("DB_HOST", "");
+    define("DB_USER", "");
+    define("DB_PASS", "!");
+    define("DB_NAME", "");
+    define("DB_PORT", "");
+    define("PASSWORD_EMAIL", "*52");
+?> 
