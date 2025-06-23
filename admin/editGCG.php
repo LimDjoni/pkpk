@@ -1,5 +1,5 @@
 <?php 
-$title = "Edit Good Corporate Governance | Perdana Karya Perkasa, Tbk"; 
+$title = "Edit Good Corporate Governance | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

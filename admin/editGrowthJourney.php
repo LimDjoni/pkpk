@@ -1,5 +1,5 @@
 <?php 
-$title = "Edit Growth Journey | Perdana Karya Perkasa, Tbk"; 
+$title = "Edit Growth Journey | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

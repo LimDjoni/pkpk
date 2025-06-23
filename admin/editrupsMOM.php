@@ -1,5 +1,5 @@
 <?php 
-$title = "Edit GMS Minutes Of Meeting | Perdana Karya Perkasa, Tbk"; 
+$title = "Edit GMS Minutes Of Meeting | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

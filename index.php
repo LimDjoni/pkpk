@@ -1,5 +1,5 @@
 <!-- Header -->
-<?php $title = "PKPK | Welcome to Perdana Karya Perkasa, Tbk";
+<?php $title = "PKPK | Welcome to Paragon Karya Perkasa, Tbk";
 $page = "."; 
 include 'include/header.php';
 include_once (PROJECT_ROOT_PATH . '/../Controller/homeController.php');

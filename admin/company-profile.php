@@ -1,5 +1,5 @@
 <?php 
-$title = "Company Profile | Perdana Karya Perkasa, Tbk"; 
+$title = "Company Profile | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 
 if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {

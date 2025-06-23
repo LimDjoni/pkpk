@@ -1,5 +1,5 @@
 <?php 
-$title = "Edit GMS Announcement | Perdana Karya Perkasa, Tbk"; 
+$title = "Edit GMS Announcement | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

@@ -1,5 +1,5 @@
 <?php 
-$title = "Vission Mission | Perdana Karya Perkasa, Tbk"; 
+$title = "Vission Mission | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

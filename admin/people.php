@@ -1,5 +1,5 @@
 <?php 
-$title = "People | Perdana Karya Perkasa, Tbk"; 
+$title = "People | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

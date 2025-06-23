@@ -1,5 +1,5 @@
 <?php 
-$title = "GMS Invitation | Perdana Karya Perkasa, Tbk"; 
+$title = "GMS Invitation | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

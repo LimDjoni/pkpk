@@ -4,7 +4,7 @@
 <footer class="footer-section1"> 
 	<div class="col-lg-12">
 		<div class="copyright-text">
-			<p> Copyright &copy; PT Perdana Karya Perkasa, Tbk. <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. | <a href="sitemap">Sitemap</a></p> 
+			<p> Copyright &copy; PT Paragon Karya Perkasa, Tbk. <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. | <a href="sitemap">Sitemap</a></p> 
 		</div>
 	</div>
 </footer>

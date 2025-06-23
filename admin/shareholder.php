@@ -1,5 +1,5 @@
 <?php 
-$title = "Shareholder | Perdana Karya Perkasa, Tbk"; 
+$title = "Shareholder | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

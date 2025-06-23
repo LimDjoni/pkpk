@@ -1,5 +1,5 @@
 <?php 
-$title = "Edit Subheader | Perdana Karya Perkasa, Tbk"; 
+$title = "Edit Subheader | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

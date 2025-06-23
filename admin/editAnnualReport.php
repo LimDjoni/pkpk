@@ -1,5 +1,5 @@
 <?php 
-$title = "Edit Annual Report | Perdana Karya Perkasa, Tbk"; 
+$title = "Edit Annual Report | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';
 include_once 'include/logActivity.php'; // Add logging
 

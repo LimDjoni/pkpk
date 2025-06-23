@@ -1,5 +1,5 @@
 <?php
-$title = "ADMIN PORTAL | Perdana Karya Perkasa, Tbk"; 
+$title = "ADMIN PORTAL | Paragon Karya Perkasa, Tbk"; 
 include 'include/header.php';  
 include_once 'include/logActivity.php'; // Add logging
 
